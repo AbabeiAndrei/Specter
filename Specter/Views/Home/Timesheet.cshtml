@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Timesheet";
+}
+
+@model TimesheetModel
+
+
+<div class="container">
+    <h3>Create your timesheet</h3>
+    <form class="col-md-6">
+        <div class="form-group">
+            <label>Task</label>
+            <input class="form-control" type="text" asp-for="Name" />
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" asp-for="Description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input class="form-control" type="date" asp-for="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
+            @*@Html.TextBoxFor(x => x.Date, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", @Value = @DateTime.Now.ToString("dd-MMM-yyyy") })*@
+        </div>
+        <div class="form-group">
+            <label>Hours</label>
+            <input class="form-control" type="number" asp-for="Time"/>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Confirm</button>
+    </form>
+    <div class="col-md-6">
+        <span>No input data</span>
+    </div>
+</div>
