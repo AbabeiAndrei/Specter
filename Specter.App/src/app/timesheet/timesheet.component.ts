@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./timesheet.component.less']
 })
 export class TimesheetComponent {
+
   date = new FormControl(new Date());
   
 }

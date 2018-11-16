@@ -15,6 +15,7 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
 import { TimesheetTableComponent } from './timesheet-table/timesheet-table.component';
 import { LoginComponent } from './user-management/login/login.component';
 import { RegisterComponent } from './user-management/register/register.component';
+import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
 
 import {
   MatDatepickerModule,
@@ -34,7 +35,8 @@ import {
     TimesheetComponent,
     TimesheetTableComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ForgotPasswordComponent
   ],
   exports: [
     DragDropModule,
@@ -71,6 +73,7 @@ import {
       { path: 'timesheet', component: TimesheetComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },      
+      { path: 'forgot', component: ForgotPasswordComponent },      
     ])
   ],
   providers: [],

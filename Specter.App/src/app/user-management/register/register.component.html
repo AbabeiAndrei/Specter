@@ -9,7 +9,7 @@
         </div>
         <div class="row">
             <mat-form-field class="full-width">
-                <input matInput type="email" placeholder="Email"  [formControl]="emailFormControl" required />
+                <input matInput type="email" placeholder="Email"  [formControl]="emailFormControl" [(ngModel)]="email" required />
                 <mat-error *ngIf="emailFormControl.hasError('email')">
                     Please enter a valid email address
                 </mat-error>
@@ -17,17 +17,17 @@
         </div>
         <div class="row">
             <mat-form-field class="full-width">
-                <input matInput type="password" placeholder="Password" required />
+                <input matInput type="password" placeholder="Password" [(ngModel)]="password" required/>
             </mat-form-field>
         </div>
         <div class="row">
             <mat-form-field class="full-width">
-                <input matInput type="password" placeholder="Confirm password" required />
+                <input matInput type="password" placeholder="Confirm password" [(ngModel)]="password2" required />
             </mat-form-field>
         </div>
         <div class="row register-actions-pnl">
             <div class="col-md-6">
-                <button mat-flat-button color="primary">Register</button>
+                <button mat-flat-button color="primary" (click)="doRegister()">Register</button>
             </div>
         </div>
     </div>

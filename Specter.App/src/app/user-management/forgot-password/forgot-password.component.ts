@@ -2,19 +2,18 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.less']
+  selector: 'forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.less']
 })
-export class RegisterComponent {
+export class ForgotPasswordComponent {
   email: string;
-  password: string;
-  password2: string;
+
   emailFormControl = new FormControl('', [
     Validators.email,
   ]);
 
-  doRegister(): void {
+  sendMail(): void {
     
   }
 }
