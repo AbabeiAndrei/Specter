@@ -1,0 +1,66 @@
+<h1>Timesheet</h1>
+
+<p>Welcome {{user}} to your timesheet</p>
+
+<p>Add your timesheet information</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="tsDate" placeholder="Select date" [formControl]="date" required>
+                        <mat-datepicker-toggle matSuffix [for]="tsDate"></mat-datepicker-toggle>
+                        <mat-datepicker #tsDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field class="full-width">
+                        <mat-select [(value)]="selected" placeholder="Category" required >
+                            <mat-option value="option1">Option 1</mat-option>
+                            <mat-option value="option2">Option 2</mat-option>
+                            <mat-option value="option3">Option 3</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-8">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="Title" required>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field class="full-width">
+                        <mat-select [(value)]="selected" placeholder="Delivery" required >
+                            <mat-option value="option1">Delivery 1</mat-option>
+                            <mat-option value="option2">Delivery 2</mat-option>
+                            <mat-option value="option3">Delivery 3</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-8">
+                    <mat-form-field class="full-width">
+                        <textarea matInput placeholder="Description"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-form-field class="full-width">
+                        <input matInput type="number" placeholder="Hours" min="0" max="8" required value="1" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-9">
+                    <button mat-flat-button color="primary" class="send-btn">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <timesheet-table [date]="date"></timesheet-table>
+        </div>
+    </div>
+</div>
