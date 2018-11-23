@@ -7,6 +7,5 @@ namespace Specter.Api.Services
     public interface IEntitiyContext
     {
         IEnumerable<User> Users { get; }
-        
     }
 }

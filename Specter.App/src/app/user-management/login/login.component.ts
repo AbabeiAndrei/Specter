@@ -4,6 +4,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication.service';
+import { LoginModel } from 'src/models/loginModel';
 
 @Component({
   selector: 'login',
@@ -41,7 +42,12 @@ export class LoginComponent {
     this.submitted = true;
     
     this.loading = true;
-    this.authenticationService.login(this.email, this.password)
+    var model = new LoginModel;
+    model.email = this.email;
+    model.password = this.password;
+    model.remeber = this.remeberMe;
+
+    this.authenticationService.login(model)
         .pipe(first())
         .subscribe(data => this.router.navigate([this.returnUrl]),
                    error => {

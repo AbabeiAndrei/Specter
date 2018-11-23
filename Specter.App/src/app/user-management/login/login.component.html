@@ -19,8 +19,11 @@
                 <mat-checkbox color="primary" [(ngModel)]="remeberMe">Remember me!</mat-checkbox>
             </div>
             <div class="col-md-6">
-                <button mat-flat-button color="primary" (click)="performLogin()">Login</button>
+                <button mat-flat-button color="primary" (click)="performLogin()" [disabled]="loading">Login</button>
             </div>
+        </div>
+        <div class="row" *ngIf="error">
+            {{error}}
         </div>
         <div class="row links-pnl">
             <div class="col-md-6">
