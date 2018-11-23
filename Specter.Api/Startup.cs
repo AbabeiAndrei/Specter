@@ -35,14 +35,14 @@ namespace Specter.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             }
             else
             {
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            
+
             app.UseMvc();
         }
     }
