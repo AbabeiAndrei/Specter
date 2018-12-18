@@ -28,13 +28,14 @@ namespace Specter.Api.Controllers
         [HttpPost("authenticate")]
         public ActionResult<UserModel> Authenticate([FromBody] LoginModel model) 
         {
-            if(string.Equals(model.Email, "admin@specter.com", StringComparison.InvariantCultureIgnoreCase) && model.Password == "1")
+            if(string.Equals(model.Email, "admin@specter.com", StringComparison.InvariantCultureIgnoreCase) && 
+               model.Password == "1")
                 return new UserModel
                 {
                     Id = 1,
                     Email = "admin@specter.com",
-                    FirstName = "Admin",
-                    LastName = "Admin",
+                    FirstName = "Andrei",
+                    LastName = "Ababei",
                     Token = Guid.NewGuid().ToString()
                 };
 

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +9,10 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  currPage = '';
+
+  constructor(public authService: AuthenticationService, private router: Router){
+  }
 
   collapse() {
     this.isExpanded = false;
@@ -14,5 +20,12 @@ export class NavMenuComponent {
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  getClass(item: string){
+    if(this.router.url.endsWith(item))
+      return 'active';
+      
+    return '';
   }
 }

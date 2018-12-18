@@ -3,11 +3,11 @@ import { first } from 'rxjs/operators';
 
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
-import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.less']
 })
 export class HomeComponent {
     public applicationName = "Specter";

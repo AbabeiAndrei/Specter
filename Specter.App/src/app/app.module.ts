@@ -21,6 +21,7 @@ import { TimesheetTableComponent } from './timesheet-table/timesheet-table.compo
 import { LoginComponent } from './user-management/login/login.component';
 import { RegisterComponent } from './user-management/register/register.component';
 import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
+import { LogoutComponent } from './user-management/logout/logout.component';
 
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
@@ -31,7 +32,8 @@ import {
   MatSelectModule,
   MatButtonModule,
   MatButtonToggleModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatMenuModule
 } from '@angular/material';
 
 @NgModule({
@@ -43,7 +45,8 @@ import {
     TimesheetTableComponent,
     LoginComponent,
     RegisterComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    LogoutComponent,
   ],
   exports: [
     DragDropModule,
@@ -59,6 +62,7 @@ import {
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    MatMenuModule,
     TimesheetTableComponent
   ],
   imports: [
@@ -76,13 +80,15 @@ import {
     MatButtonModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    MatMenuModule,
     NgHttpLoaderModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},
       { path: 'timesheet', component: TimesheetComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },      
-      { path: 'forgot', component: ForgotPasswordComponent },   
+      { path: 'forgot', component: ForgotPasswordComponent }, 
+      { path: 'logout', component: LogoutComponent},  
       { path: '**', redirectTo: '' }   
     ])
   ],

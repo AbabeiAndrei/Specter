@@ -1,19 +1,31 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">Specter</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
+        <li class="nav-item" [ngClass]="getClass('/')" >
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" [ngClass]="getClass('timesheet')">
           <a class="nav-link" href="/timesheet">Timesheet</a>
         </li>
       </ul>
     </div>
-    <a class="navbar-text" href="/login">
-      Login
-    </a>
+    <div *ngIf="authService.currentUserValue != null; then loggedIn; else notLoggedIn"></div>
+    <ng-template #loggedIn>
+      <button mat-button [matMenuTriggerFor]="menu" class="navbar-text">
+        {{authService.currentUserValue.firstName}} {{authService.currentUserValue.lastName}}
+      </button>
+      <mat-menu #menu="matMenu">
+        <a mat-menu-item href="/profile">Profile</a>
+        <a mat-menu-item href="/logout">Logout</a>
+      </mat-menu>
+    </ng-template>
+    <ng-template #notLoggedIn>
+        <a class="navbar-text" href="/login">
+          Login
+        </a>
+      </ng-template>
   </nav>
