@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Specter.Api.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,9 @@ namespace Specter.Api.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,7 +35,7 @@ namespace Specter.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Template",
+                name: "Templates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -48,23 +50,23 @@ namespace Specter.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Template", x => x.Id);
+                    table.PrimaryKey("PK_Templates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Template_Users_CreatedByUserId",
+                        name: "FK_Templates_Users_CreatedByUserId",
                         column: x => x.CreatedByUserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Template_Template_ForkId",
+                        name: "FK_Templates_Templates_ForkId",
                         column: x => x.ForkId,
-                        principalTable: "Template",
+                        principalTable: "Templates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Timesheet",
+                name: "Timesheets",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -77,9 +79,9 @@ namespace Specter.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Timesheet", x => x.Id);
+                    table.PrimaryKey("PK_Timesheets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Timesheet_Users_UserId1",
+                        name: "FK_Timesheets_Users_UserId1",
                         column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -87,7 +89,7 @@ namespace Specter.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TemplateHistory",
+                name: "TemplatesHistory",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -99,46 +101,46 @@ namespace Specter.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TemplateHistory", x => x.Id);
+                    table.PrimaryKey("PK_TemplatesHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TemplateHistory_Template_TemplateId",
+                        name: "FK_TemplatesHistory_Templates_TemplateId",
                         column: x => x.TemplateId,
-                        principalTable: "Template",
+                        principalTable: "Templates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Template_CreatedByUserId",
-                table: "Template",
+                name: "IX_Templates_CreatedByUserId",
+                table: "Templates",
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Template_ForkId",
-                table: "Template",
+                name: "IX_Templates_ForkId",
+                table: "Templates",
                 column: "ForkId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TemplateHistory_TemplateId",
-                table: "TemplateHistory",
+                name: "IX_TemplatesHistory_TemplateId",
+                table: "TemplatesHistory",
                 column: "TemplateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Timesheet_UserId1",
-                table: "Timesheet",
+                name: "IX_Timesheets_UserId1",
+                table: "Timesheets",
                 column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TemplateHistory");
+                name: "TemplatesHistory");
 
             migrationBuilder.DropTable(
-                name: "Timesheet");
+                name: "Timesheets");
 
             migrationBuilder.DropTable(
-                name: "Template");
+                name: "Templates");
 
             migrationBuilder.DropTable(
                 name: "Users");

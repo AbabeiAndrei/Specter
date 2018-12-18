@@ -9,8 +9,8 @@ using Specter.Api.Data;
 namespace Specter.Api.Migrations
 {
     [DbContext(typeof(SpecterDb))]
-    [Migration("20181217150503_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20181218174339_InitialCreation")]
+    partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,10 @@ namespace Specter.Api.Migrations
                     b.Property<string>("Email");
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -88,7 +92,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("ForkId");
 
-                    b.ToTable("Template");
+                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.TemplateHistory", b =>
@@ -112,7 +116,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.ToTable("TemplateHistory");
+                    b.ToTable("TemplatesHistory");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Timesheet", b =>
@@ -137,7 +141,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Timesheet");
+                    b.ToTable("Timesheets");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Template", b =>

@@ -8,9 +8,9 @@ namespace Specter.Api.Data
     {
         public DbSet<ApplicationUser> Users { get; set; }
 
-        public DbSet<Template> Tempaltes { get; set; }
+        public DbSet<Template> Templates { get; set; }
 
-        public DbSet<TemplateHistory> TempalteHistory { get; set; }
+        public DbSet<TemplateHistory> TemplatesHistory { get; set; }
 
         public DbSet<Timesheet> Timesheets { get; set; }
 
@@ -87,6 +87,12 @@ namespace Specter.Api.Data
                       .WithMany(t => t.Timesheets)
                       .HasForeignKey(t => t.UserId);
                 */
+            });
+
+            builder.Entity<ApplicationUser>(entity => 
+            {
+                entity.Property(p => p.FirstName);
+                entity.Property(p => p.LastName);
             });
         }
     }

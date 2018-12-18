@@ -6,9 +6,13 @@ using System.Collections.Generic;
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using Specter.Api.Data;
 using Specter.Api.Services;
 
 namespace Specter.Api
@@ -17,13 +21,14 @@ namespace Specter.Api
     {
         public static async Task Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build();
-
-            var host = BuildWebHost(args);
+            var host = CreateWebHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
+                var context = scope.ServiceProvider.GetRequiredService<SpecterDb>();
+
+                await context.Database.MigrateAsync();
                 await seeder.Seed();
             }
 

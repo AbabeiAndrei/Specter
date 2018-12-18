@@ -1,9 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+
 using Specter.Api.Model;
+using Specter.Api.Data.Entities;
 
 namespace Specter.Api.Controllers
 {
@@ -11,6 +15,13 @@ namespace Specter.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly SignInManager<ApplicationUser> _signinManager;
+
+        public UsersController(SignInManager<ApplicationUser> signinManager)
+        {
+            _signinManager = signinManager;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
@@ -26,20 +37,27 @@ namespace Specter.Api.Controllers
         }
 
         [HttpPost("authenticate")]
-        public ActionResult<UserModel> Authenticate([FromBody] LoginModel model) 
+        public async Task<ActionResult<UserModel>> Authenticate([FromBody] LoginModel model) 
         {
-            if(string.Equals(model.Email, "admin@specter.com", StringComparison.InvariantCultureIgnoreCase) && 
-               model.Password == "1")
-                return new UserModel
-                {
-                    Id = 1,
-                    Email = "admin@specter.com",
-                    FirstName = "Andrei",
-                    LastName = "Ababei",
-                    Token = Guid.NewGuid().ToString()
-                };
+            var user = _signinManager.UserManager.Users.FirstOrDefault(au => au.Email == model.Email);
 
-            return NotFound();
+            if(user == null)
+                return NotFound();
+
+            var signinResult = await _signinManager.PasswordSignInAsync(user, model.Password, model.Persist, true);
+
+            if(!signinResult.Succeeded)
+                return NotFound();
+
+            var result = new UserModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Token = Guid.NewGuid().ToString() //todo
+            };
+
+            return Ok(result);
         }
     }
 }

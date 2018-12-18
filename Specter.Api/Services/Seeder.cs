@@ -1,38 +1,43 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using Specter.Api.Data;
+using Specter.Api.Data.Entities;
 
 namespace Specter.Api.Services
 {
     public class SpecterSeeder : ISeeder
     {
-        private readonly IApplicationContext _context;
+        private readonly UserManager<ApplicationUser> _manager;
 
-        public SpecterSeeder(IApplicationContext context)
+        public SpecterSeeder(UserManager<ApplicationUser> manager)
         {
-            _context = context;
+            _manager = manager;
         }
 
         public async Task Seed()
         {
-            if(_context.Users.Any())
+            if(_manager.Users.Any())
                 return;
-
-            using(var store = new UserStore<ApplicationUser>(_context))
-            using(var manager = new UserManager<ApplicationUser>(store))
+            
+            var user = new ApplicationUser
             {
-                var user = new ApplicationUser
-                {
-                    FirstName = "Andrei",
-                    LastName = "Admin",
-                    Email = "admin@specter.com"
-                };
+                UserName = "admin",
+                FirstName = "Andrei",
+                LastName = "Admin",
+                Email = "admin@specter.com"
+            };
 
-                var result = await manager.CreateAsync(user, "1");
+            var result = await _manager.CreateAsync(user, "123123Ab!");
 
-                if(!result.Succeeded) 
-                    throw new Exception(result.Errors.First()); 
-            }
+            if(!result.Succeeded) 
+                throw new Exception(result.Errors.First().Description); 
+            
         }
     }
 }

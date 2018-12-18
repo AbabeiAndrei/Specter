@@ -29,6 +29,10 @@ namespace Specter.Api.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -86,7 +90,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("ForkId");
 
-                    b.ToTable("Template");
+                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.TemplateHistory", b =>
@@ -110,7 +114,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.ToTable("TemplateHistory");
+                    b.ToTable("TemplatesHistory");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Timesheet", b =>
@@ -135,7 +139,7 @@ namespace Specter.Api.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Timesheet");
+                    b.ToTable("Timesheets");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Template", b =>
