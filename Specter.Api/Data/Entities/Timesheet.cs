@@ -2,20 +2,24 @@
 
 namespace Specter.Api.Data.Entities
 {
-    public class Timesheet
+    public class Timesheet : IRemovable
     {
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
-        public DateTime Date { get; set; }
+        public virtual DateTime Date { get; set; }
 
-        public int Time { get; set; }
+        public virtual int Time { get; set; }
 
-        public Guid UserId { get; set; }
+        public virtual string UserId { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual Guid CategoryId { get; set; }
+
+        public virtual Guid DeliveryId { get; set; }
+
+        public virtual bool Removed { get; set; }
     }
 }

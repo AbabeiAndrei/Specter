@@ -1,3 +1,5 @@
+using System;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Specter.Api.Data.Entities;
@@ -6,13 +8,27 @@ namespace Specter.Api.Data
 {
     public class SpecterDb : DbContext, IApplicationContext
     {
-        public DbSet<ApplicationUser> Users { get; set; }
+        public virtual DbSet<ApplicationUser> Users { get; set; }
 
-        public DbSet<Template> Templates { get; set; }
+        public virtual DbSet<Template> Templates { get; set; }
 
-        public DbSet<TemplateHistory> TemplatesHistory { get; set; }
+        public virtual DbSet<TemplateHistory> TemplatesHistory { get; set; }
 
-        public DbSet<Timesheet> Timesheets { get; set; }
+        public virtual DbSet<Timesheet> Timesheets { get; set; }
+
+        public virtual DbSet<Category> Categories { get; set; }
+
+        public virtual DbSet<Delivery> Deliveries { get; set; }
+
+        public virtual DbSet<Project> Projects { get; set; }
+
+        public virtual DbSet<UserProject> UserProjects { get; set; }
+
+        public virtual DbSet<IdentityUserRole<string>> IdentityUserRoles { get; set; }
+
+        public virtual DbSet<IdentityUserClaim<string>> IdentityUserClaims { get; set; }
+
+        public virtual DbSet<IdentityRole> IdentityRoles{ get; set; }
 
         public SpecterDb()
         {
@@ -82,6 +98,9 @@ namespace Specter.Api.Data
                 entity.Property(t => t.Date).IsRequired();
                 entity.Property(t => t.Time).IsRequired();
                 entity.Property(t => t.UserId).IsRequired();
+                entity.Property(t => t.CategoryId).IsRequired();
+                entity.Property(t => t.DeliveryId).IsRequired();
+                entity.Property(t => t.Removed).HasDefaultValue(false);
                 /*      
                 entity.HasOne(t => t.User)
                       .WithMany(t => t.Timesheets)
@@ -94,6 +113,53 @@ namespace Specter.Api.Data
                 entity.Property(p => p.FirstName);
                 entity.Property(p => p.LastName);
             });
+
+            builder.Entity<IdentityRole>().HasKey(p => p.Id);
+
+            builder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
+            builder.Entity<IdentityUserClaim<string>>().HasKey(p => p.Id);
+
+            builder.Entity<Category>(p => 
+            {
+                p.HasKey(c => c.Id);
+                p.Property(c => c.Name);
+                p.Property(c => c.Description);
+                p.Property(c => c.Removed);
+            });
+
+            builder.Entity<Project>(p => 
+            {
+                p.HasKey(d => d.Id);
+                p.Property(d => d.Name);
+                p.Property(d => d.Description);
+                p.Property(d => d.Removed);
+            });
+
+            builder.Entity<Delivery>(p =>
+            {
+                p.HasKey(d => d.Id);
+                p.Property(d => d.Name);
+                p.Property(d => d.Description);
+                p.Property(d => d.Order);
+                p.Property(d => d.ProjectId);
+                p.Property(d => d.Removed);
+            });
+
+            builder.Entity<UserProject>(p => 
+            {
+                p.HasKey(up => new { up.UserId, up.ProjectId, up.RoleId });
+                p.Property(up => up.Removed);
+            });
+        }
+
+        void IDbContext.SaveChanges()
+        {
+            SaveChanges();
+        }
+
+        public void Rollback()
+        {
+            throw new NotImplementedException();
         }
     }
 }

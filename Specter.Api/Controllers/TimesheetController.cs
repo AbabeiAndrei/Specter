@@ -1,45 +1,198 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+
+using AutoMapper;
+
+using Specter.Api.Models;
+using Specter.Api.Services;
+using Specter.Api.Data.Entities;
+using Specter.Api.Data.Repository;
 
 namespace Specter.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class TimesheetController : ControllerBase
     {
-        // GET api/values
+        private const int MIN_YEAR = 2000;
+
+        private readonly IMapper _mapper;
+        private readonly IDateParserService _dateParserService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITimesheetRepository _timesheetRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IDeliveryRepository _deliveryRepository;
+        private readonly IProjectRepository _projectRepository;
+
+        public TimesheetController(IMapper mapper, 
+                                   IDateParserService dateParserService, 
+                                   UserManager<ApplicationUser> userManager, 
+                                   ITimesheetRepository timesheetRepository,
+                                   ICategoryRepository categoryRepository,
+                                   IDeliveryRepository deliveryRepository,
+                                   IProjectRepository projectRepository)
+        {
+            _mapper = mapper;
+            _dateParserService = dateParserService;
+            _userManager = userManager;
+            _timesheetRepository = timesheetRepository;
+            _categoryRepository = categoryRepository;
+            _deliveryRepository = deliveryRepository;
+            _projectRepository = projectRepository;
+        }
+
+        [Authorize]
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public Task<ActionResult<IEnumerable<TimesheetModel>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Get("today");
+        }
+        
+        [Authorize]
+        [HttpGet("{date}")]
+        public Task<ActionResult<IEnumerable<TimesheetModel>>> Get(string date)
+        {
+            return Get(new DateFilterIntervalModel(date, date));
+        }
+        
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TimesheetModel>>> Get([FromBody] DateFilterIntervalModel date)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var tsFrom = _dateParserService.Parse(date.From);
+            var tsTo = _dateParserService.Parse(date.To).AddDays(1);
+
+            var dateNow = _dateParserService.GetDate(DateTime.Now);
+
+            if(tsFrom.Year < MIN_YEAR || tsTo.Year < MIN_YEAR)
+                return BadRequest("Date to old");
+
+            if(tsFrom > tsTo)
+                return BadRequest("Invalid interval");
+
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return Unauthorized();
+
+            var result = _timesheetRepository.GetAll()
+                                             .Where(ts => ts.UserId == user.Id && ts.Date >= tsFrom && ts.Date <= tsTo);
+        
+            var models = result.ToList().Select(_mapper.Map<TimesheetModel>).ToList();
+
+            foreach(var model in models)
+            {
+                var category = _categoryRepository.GetById(model.CategoryId);
+                model.Category = category?.Name; 
+
+                var delivery = _deliveryRepository.GetById(model.DeliveryId);
+                model.Delivery = delivery?.Name;
+
+                var project = _projectRepository.GetById(delivery.ProjectId);
+                model.Project = project?.Name;
+            }
+
+            return Ok(models);
         }
 
-        // GET api/values/5
+        [Authorize]
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<TimesheetModel>> Get(Guid id)
         {
-            return "value";
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return Unauthorized();
+
+            var ts = _timesheetRepository.GetById(id);
+
+            if(ts == null)
+                return NotFound();
+
+            if(ts.UserId != user.Id)
+                return Unauthorized();
+
+            return Ok(_mapper.Map<TimesheetModel>(ts));
         }
 
-        // POST api/values
+        [Authorize]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<TimesheetModel>> Post([FromBody] TimesheetUpdateModel model)
         {
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return Unauthorized();
+
+            var ts = _mapper.Map<Timesheet>(model);
+
+            if(ts == null)
+                return BadRequest();
+
+            ts.UserId = user.Id;
+
+            _timesheetRepository.Insert(ts);
+
+            return CreatedAtAction(nameof(Get), ts.Id, ts);
         }
 
-        // PUT api/values/5
+        [Authorize]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(Guid id, [FromBody] TimesheetUpdateModel model)
         {
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return Unauthorized();
+
+            var ts = _timesheetRepository.GetById(id);
+
+            if(ts == null)
+                return NotFound();
+
+            if(ts.UserId != user.Id)
+                return Unauthorized();
+
+            ts.Name = model.Name;
+            ts.Description = model.Description;
+            ts.Date = model.Date;
+            ts.Time = model.Time;
+
+            _timesheetRepository.Update(ts);
+
+            return Ok();
         }
 
-        // DELETE api/values/5
+        [Authorize]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return Unauthorized();
+
+            var ts = _timesheetRepository.GetById(id);
+
+            if(ts == null)
+                return NotFound();
+
+            if(ts.UserId != user.Id)
+                return Unauthorized();
+
+            _timesheetRepository.Delete(ts);
+
+            return Ok();
         }
     }
 }

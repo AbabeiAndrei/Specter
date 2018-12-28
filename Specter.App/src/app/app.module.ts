@@ -33,7 +33,9 @@ import {
   MatButtonModule,
   MatButtonToggleModule,
   MatCheckboxModule,
-  MatMenuModule
+  MatMenuModule,
+  MatTableModule,
+  MatIconModule
 } from '@angular/material';
 
 @NgModule({
@@ -63,6 +65,8 @@ import {
     MatButtonToggleModule,
     MatCheckboxModule,
     MatMenuModule,
+    MatTableModule,
+    MatIconModule,
     TimesheetTableComponent
   ],
   imports: [
@@ -81,6 +85,8 @@ import {
     MatButtonToggleModule,
     MatCheckboxModule,
     MatMenuModule,
+    MatTableModule,
+    MatIconModule,
     NgHttpLoaderModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},

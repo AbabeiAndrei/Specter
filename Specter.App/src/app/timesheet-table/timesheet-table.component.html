@@ -1,19 +1,65 @@
-<i>Empty timesheet for {{date.value | date}}</i>
-<table mat-table  matSort class="mat-elevation-z8">
-        <!-- [dataSource]="dataSource" -->
-    <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-        <td mat-cell *matCellDef="let element"> {{element.category}} </td>
-    </ng-container>
-    
-    <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
-        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-    </ng-container>
-    
-    <ng-container matColumnDef="hours">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Hours </th>
-        <td mat-cell *matCellDef="let element"> {{element.hours}} </td>
-    </ng-container>
-    
-</table>
+<i [hidden]="timesheets != null && timesheets.data.length > 0">Empty timesheet for {{date | date}}</i>
+<div [hidden]="timesheets == null || timesheets.data.length <= 0">
+    <mat-form-field class="full-width">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    <table mat-table matSort class="mat-elevation-z8" [dataSource]="timesheets" multiTemplateDataRows> 
+        <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+            <td mat-cell *matCellDef="let ts"> {{ts.category}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="project">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project </th>
+            <td mat-cell *matCellDef="let ts"> {{ts.project}} - {{ts.delivery}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let ts"> {{ts.name}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Hours </th>
+            <td mat-cell *matCellDef="let ts"> {{ts.time}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let ts" [attr.colspan]="displayedColumns.length">
+                <div class="ts-details" [@detailExpand]="ts == expandedTs ? 'expanded' : 'collapsed'">
+                    <div class="ts-title">
+                        <button mat-icon-button>
+                            <mat-icon aria-label="Options">more_vert</mat-icon>
+                        </button>
+                        <span>
+                            [{{ts.category}}] 
+                            <span class="ts-name">
+                                {{ts.name}}
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="ts-time">
+                        {{ts.time}} hours
+                    </div>
+
+                    <div class="ts-subtitle">
+                        {{ts.project}} - {{ts.delivery}}
+                    </div>
+                    
+                    <div class="ts-description">
+                        {{ts.description}}
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        
+        <tr mat-row *matRowDef="let ts; columns: displayedColumns;"
+            [class.element-expanded-row]="expandedTs === ts"
+            (click)="expandedTs = expandedTs === ts ? null : ts">
+        </tr>
+        <tr mat-row class="element-details" *matRowDef="let row; columns: ['expandedDetail'];"></tr>
+    </table>
+</div>

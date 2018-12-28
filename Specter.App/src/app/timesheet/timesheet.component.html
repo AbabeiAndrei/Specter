@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-4">
                     <mat-form-field>
@@ -19,10 +19,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <mat-form-field class="full-width">
-                        <mat-select [(value)]="selected" placeholder="Category" required >
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
+                        <mat-select placeholder="Category" [formControl]="categoryControl" required >
+                            <mat-option>-- Select Category --</mat-option>
+                            <mat-option *ngFor="let category of categories" [value]="category">
+                              {{category?.name}}
+                            </mat-option>
+                            <mat-error *ngIf="categoryControl.hasError('required')">Please choose a category</mat-error> 
+                            <mat-hint>{{categoryControl.value?.description}}</mat-hint>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -35,32 +38,47 @@
             <div class="row">
                 <div class="col-md-4">
                     <mat-form-field class="full-width">
-                        <mat-select [(value)]="selected" placeholder="Delivery" required >
-                            <mat-option value="option1">Delivery 1</mat-option>
-                            <mat-option value="option2">Delivery 2</mat-option>
-                            <mat-option value="option3">Delivery 3</mat-option>
+                        <mat-select placeholder="Project" [formControl]="projectControl" required (selectionChange)="setDelivery($event.value)">
+                            <mat-option>-- Select Project --</mat-option>
+                            <mat-option *ngFor="let project of projects" [value]="project">
+                              {{project?.name}}
+                            </mat-option>
+                            <mat-error *ngIf="projectControl.hasError('required')">Please choose a project</mat-error> 
+                            <mat-hint>{{projectControl.value?.description}}</mat-hint>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-4">
                     <mat-form-field class="full-width">
-                        <textarea matInput placeholder="Description"></textarea>
+                        <mat-select placeholder="Delivery" [formControl]="deliveryControl" required >
+                            <mat-option>-- Select Delivery --</mat-option>
+                            <mat-option *ngFor="let delivery of deliveries" [value]="delivery">
+                                {{delivery?.name}}
+                            </mat-option>
+                            <mat-error *ngIf="deliveryControl.hasError('required')">Please choose a delivery</mat-error> 
+                            <mat-hint>{{deliveryControl.value?.description}}</mat-hint>
+                        </mat-select>
                     </mat-form-field>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <mat-form-field class="full-width">
                         <input matInput type="number" placeholder="Hours" min="0" max="8" required value="1" />
                     </mat-form-field>
                 </div>
-                <div class="col-md-9">
+            </div>
+            <div class="row">
+                <div class="col-md-10">
+                    <mat-form-field class="full-width">
+                        <textarea matInput placeholder="Description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-2">
                     <button mat-flat-button color="primary" class="send-btn">Add</button>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <timesheet-table [date]="date"></timesheet-table>
+        <div class="col-md-6">
+            <timesheet-table [date]="date.value"></timesheet-table>
         </div>
     </div>
 </div>

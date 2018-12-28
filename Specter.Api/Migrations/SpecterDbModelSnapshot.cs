@@ -16,6 +16,49 @@ namespace Specter.Api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.ToTable("IdentityUserRoles");
+                });
+
             modelBuilder.Entity("Specter.Api.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -56,6 +99,58 @@ namespace Specter.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<bool>("Removed");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.Delivery", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Order");
+
+                    b.Property<Guid>("ProjectId");
+
+                    b.Property<bool>("Removed");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<bool>("Removed");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Template", b =>
@@ -122,24 +217,48 @@ namespace Specter.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<Guid>("CategoryId");
+
                     b.Property<DateTime>("Date");
+
+                    b.Property<Guid>("DeliveryId");
 
                     b.Property<string>("Description");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<bool>("Removed")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
                     b.Property<int>("Time");
 
-                    b.Property<Guid>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<string>("UserId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Timesheets");
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.UserProject", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("ProjectId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<bool>("Removed");
+
+                    b.HasKey("UserId", "ProjectId", "RoleId");
+
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Template", b =>
@@ -163,9 +282,9 @@ namespace Specter.Api.Migrations
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Timesheet", b =>
                 {
-                    b.HasOne("Specter.Api.Data.Entities.ApplicationUser", "User")
+                    b.HasOne("Specter.Api.Data.Entities.ApplicationUser")
                         .WithMany("Timesheets")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

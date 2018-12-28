@@ -1,0 +1,41 @@
+table {
+    width: 100%;
+}
+
+tr.mat-footer-row {
+    font-weight: bold;
+}
+
+tr.element-details {
+    display: none;
+}
+
+tr.element-expanded-row + tr.element-details {
+    display: table-row;
+}
+
+.ts-details {
+    .ts-title {
+        font-size: 16px;
+    }
+
+    .ts-title > button + span {
+        margin-top: 4px
+    }
+
+    .ts-subtitle {
+        font-size: 18px;
+    }
+
+    .ts-time {
+        float: right;
+    }
+
+    .ts-name {
+        font-weight: bold
+    }
+
+    div {
+        padding: 6px 0
+    }
+}

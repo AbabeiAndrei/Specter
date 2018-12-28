@@ -1,11 +1,15 @@
-namespace Specter.Api.Model
+using System.ComponentModel.DataAnnotations;
+
+namespace Specter.Api.Models
 {
     public class LoginModel
     {
-        public string Email { get; set; }
+        [Required]
+        public virtual string Email { get; set; }
         
-        public string Password { get; set; }
+        [Required]
+        public virtual string Password { get; set; }
 
-        public bool Persist { get; set; }
+        public virtual bool Persist { get; set; }
     }
 }
