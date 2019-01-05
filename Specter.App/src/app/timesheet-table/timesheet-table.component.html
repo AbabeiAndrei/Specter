@@ -7,29 +7,33 @@
         <ng-container matColumnDef="category">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
             <td mat-cell *matCellDef="let ts"> {{ts.category}} </td>
+            <td mat-footer-cell *matFooterCellDef> Total </td>
         </ng-container>
         
         <ng-container matColumnDef="project">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Project </th>
             <td mat-cell *matCellDef="let ts"> {{ts.project}} - {{ts.delivery}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
         
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
             <td mat-cell *matCellDef="let ts"> {{ts.name}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
         
         <ng-container matColumnDef="time">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Hours </th>
-            <td mat-cell *matCellDef="let ts"> {{ts.time}} </td>
+            <td mat-cell *matCellDef="let ts"> {{ts.time | number}} </td>
+            <td mat-footer-cell *matFooterCellDef> {{getTotalTime() | number}} hours</td>
         </ng-container>
 
         <ng-container matColumnDef="expandedDetail">
             <td mat-cell *matCellDef="let ts" [attr.colspan]="displayedColumns.length">
                 <div class="ts-details" [@detailExpand]="ts == expandedTs ? 'expanded' : 'collapsed'">
                     <div class="ts-title">
-                        <button mat-icon-button>
-                            <mat-icon aria-label="Options">more_vert</mat-icon>
+                        <button mat-icon-button (click)="editTimesheet(ts)">
+                            <mat-icon aria-label="Options">launch</mat-icon>
                         </button>
                         <span>
                             [{{ts.category}}] 
@@ -40,7 +44,7 @@
                     </div>
 
                     <div class="ts-time">
-                        {{ts.time}} hours
+                        {{ts.time | number}} hours
                     </div>
 
                     <div class="ts-subtitle">
@@ -58,8 +62,10 @@
         
         <tr mat-row *matRowDef="let ts; columns: displayedColumns;"
             [class.element-expanded-row]="expandedTs === ts"
-            (click)="expandedTs = expandedTs === ts ? null : ts">
+            (click)="expandedTs = expandedTs === ts ? null : ts"
+            class="timesheet-row">
         </tr>
         <tr mat-row class="element-details" *matRowDef="let row; columns: ['expandedDetail'];"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
     </table>
 </div>

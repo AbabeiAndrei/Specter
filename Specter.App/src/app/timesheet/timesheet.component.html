@@ -8,12 +8,15 @@
     <div class="row">
         <div class="col-md-6">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <mat-form-field>
                         <input matInput [matDatepicker]="tsDate" placeholder="Select date" [formControl]="date" required>
                         <mat-datepicker-toggle matSuffix [for]="tsDate"></mat-datepicker-toggle>
                         <mat-datepicker #tsDate></mat-datepicker>
                     </mat-form-field>
+                </div>
+                <div class="col-md-7">
+                    <button mat-flat-button class="today" color="secondary" (click)="today()">Today</button>                    
                 </div>
             </div>
             <div class="row">
@@ -31,7 +34,8 @@
                 </div>
                 <div class="col-md-8">
                     <mat-form-field class="full-width">
-                        <input matInput placeholder="Title" required>
+                        <input matInput placeholder="Title" [formControl]="title" maxlength="256" required>
+                        <mat-hint align="end">{{title.value.length}} / 256</mat-hint>
                     </mat-form-field>
                 </div>
             </div>
@@ -62,19 +66,28 @@
                 </div>
                 <div class="col-md-4">
                     <mat-form-field class="full-width">
-                        <input matInput type="number" placeholder="Hours" min="0" max="8" required value="1" />
+                        <input matInput type="number" placeholder="Hours" min="0" max="12" required value="1" [formControl]="hours" />
+                        <mat-hint class="warn" align="start" [hidden]="hours.value <= 8">Your're about to add more than 8 hours</mat-hint>
                     </mat-form-field>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-10">
                     <mat-form-field class="full-width">
-                        <textarea matInput placeholder="Description"></textarea>
+                        <textarea matInput placeholder="Description" [formControl]="description" maxlength="1024"></textarea>
+                        <mat-hint align="end">{{description.value.length}} / 1024</mat-hint>
                     </mat-form-field>
                 </div>
                 <div class="col-md-2">
-                    <button mat-flat-button color="primary" class="send-btn">Add</button>
+                    <button mat-flat-button color="primary" class="send-btn" (click)="sendTimesheet()">Add</button>
                 </div>
+            </div>
+            <div class="row errors" [hidden]="errors == null || errors.length <= 0">
+                <ul>
+                    <li *ngFor="let error of errors">
+                        {{error}}
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="col-md-6">

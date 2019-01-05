@@ -11,4 +11,8 @@ export class TimesheetService {
     getAll(date: string) {
         return this.http.get<Timesheet[]>(`${environment.apiUrl}/timesheet/` + date);
     }
+
+    add(ts: Timesheet) {
+      return this.http.post(`${environment.apiUrl}/timesheet/`, ts);
+    }
 }

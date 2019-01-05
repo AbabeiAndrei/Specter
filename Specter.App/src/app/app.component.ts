@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../models/user';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { User } from '../models/user';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'Specter';
+  title = environment.appName;
   currentUser: User;
 
   constructor(private router: Router, private authenticationService: AuthenticationService ) {

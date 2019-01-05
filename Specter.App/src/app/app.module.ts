@@ -23,6 +23,8 @@ import { RegisterComponent } from './user-management/register/register.component
 import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
 import { LogoutComponent } from './user-management/logout/logout.component';
 
+import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
+
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import {
@@ -35,7 +37,8 @@ import {
   MatCheckboxModule,
   MatMenuModule,
   MatTableModule,
-  MatIconModule
+  MatIconModule,
+  MatDialogModule
 } from '@angular/material';
 
 @NgModule({
@@ -49,6 +52,7 @@ import {
     RegisterComponent,
     ForgotPasswordComponent,
     LogoutComponent,
+    TimesheetEditDialog
   ],
   exports: [
     DragDropModule,
@@ -67,7 +71,9 @@ import {
     MatMenuModule,
     MatTableModule,
     MatIconModule,
-    TimesheetTableComponent
+    MatDialogModule,
+    TimesheetTableComponent,
+    TimesheetEditDialog
   ],
   imports: [
     HttpClientModule,
@@ -87,6 +93,7 @@ import {
     MatMenuModule,
     MatTableModule,
     MatIconModule,
+    MatDialogModule,
     NgHttpLoaderModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},
@@ -97,6 +104,9 @@ import {
       { path: 'logout', component: LogoutComponent},  
       { path: '**', redirectTo: '' }   
     ])
+  ],
+  entryComponents: [
+    TimesheetEditDialog
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
