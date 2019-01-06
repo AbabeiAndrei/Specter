@@ -46,8 +46,8 @@ namespace Specter.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPut]
-        public virtual ActionResult<CategoryModel> Put([FromBody] CategoryModel model) 
+        [HttpPost]
+        public virtual ActionResult<CategoryModel> Post([FromBody] CategoryModel model) 
         {
             var entity = _mapper.Map<Data.Entities.Category>(model);
 

@@ -74,9 +74,9 @@ namespace Specter.Api.Controllers
             return Ok(result.Select(_mapper.Map<DeliveryModel>));
         }
 
-        [HttpPut]
-        [AllowAnonymous]
-        public virtual ActionResult Put([FromBody] ProjectModel model)
+        [HttpPost]
+        [Authorize]
+        public virtual ActionResult Post([FromBody] ProjectModel model)
         {
             var entity = _mapper.Map<Project>(model);
 
@@ -85,9 +85,9 @@ namespace Specter.Api.Controllers
             return Created("project/" + entity.Id, _mapper.Map<ProjectModel>(entity));
         }
 
-        [HttpPut("{projectId}")]
-        [AllowAnonymous]
-        public virtual ActionResult Put(Guid projectId, [FromBody] DeliveryModel model)
+        [HttpPost("{projectId}/deliveries")]
+        [Authorize]
+        public virtual ActionResult Post(Guid projectId, [FromBody] DeliveryModel model)
         {
             var entity = _mapper.Map<Delivery>(model);
 
@@ -95,7 +95,7 @@ namespace Specter.Api.Controllers
 
             _deliveryRepository.Insert(entity);
 
-            return Created($"project/{projectId}/{entity.Id}", _mapper.Map<ProjectModel>(entity));
+            return Created($"project/{projectId}/deliveries/{entity.Id}", _mapper.Map<DeliveryModel>(entity));
         }
     }
 }

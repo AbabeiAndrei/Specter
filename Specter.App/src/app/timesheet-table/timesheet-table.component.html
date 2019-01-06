@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="ts-subtitle">
-                            {{ts.project}} - {{ts.delivery}}
+                            {{ts.delivery != null ? ts.project + ' - ' + ts.delivery : ts.project}}
                         </div>
                         
                         <div class="ts-description">

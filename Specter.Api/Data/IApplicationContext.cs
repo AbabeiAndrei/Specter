@@ -1,3 +1,5 @@
+using System;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,9 +17,9 @@ namespace Specter.Api.Data
         DbSet<Delivery> Deliveries { get; }
         DbSet<Project> Projects { get; }
         DbSet<UserProject> UserProjects { get; }
-        DbSet<IdentityUserRole<string>> IdentityUserRoles { get; }
-        DbSet<IdentityUserClaim<string>> IdentityUserClaims { get; }
-        DbSet<IdentityRole> IdentityRoles{ get; }
+        DbSet<IdentityUserRole<Guid>> IdentityUserRoles { get; }
+        DbSet<IdentityUserClaim<Guid>> IdentityUserClaims { get; }
+        DbSet<IdentityRole<Guid>> IdentityRoles{ get; }
 
     }
 }

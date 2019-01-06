@@ -14,6 +14,6 @@ export class ForgotPasswordComponent {
   ]);
 
   sendMail(): void {
-    
+
   }
 }

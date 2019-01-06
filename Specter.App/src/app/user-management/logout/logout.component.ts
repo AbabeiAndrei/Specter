@@ -17,6 +17,6 @@ export class LogoutComponent {
   ngOnInit() {
     // reset login status
     this.authenticationService.logout();
-    this.router.navigate(["/"]);
+    this.router.navigate(['/']);
   }
 }

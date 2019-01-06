@@ -16,7 +16,7 @@ namespace Specter.Api.Models
 
         public virtual DateTime Date { get; set; }
 
-        public virtual int Time { get; set; }
+        public virtual float Time { get; set; }
 
         public virtual bool Locked { get; set; }
 
@@ -29,6 +29,8 @@ namespace Specter.Api.Models
         
         public virtual Guid CategoryId { get; set; }
 
-        public virtual Guid DeliveryId { get; set; }
+        public virtual Guid ProjectId { get; set; }
+
+        public virtual Guid? DeliveryId { get; set; }
     }
 }

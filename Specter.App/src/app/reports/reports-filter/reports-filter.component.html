@@ -1,0 +1,32 @@
+<div class="row filter">
+    <div class="col-md-12">
+        <mat-form-field>
+            <input matInput [matDatepicker]="tsDateFrom" placeholder="From" [formControl]="dateFrom" required readonly>
+            <mat-datepicker-toggle matSuffix [for]="tsDateFrom"></mat-datepicker-toggle>
+            <mat-datepicker #tsDateFrom></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input matInput [matDatepicker]="tsDateTo" placeholder="Until" [formControl]="dateTo" required readonly>
+            <mat-datepicker-toggle matSuffix [for]="tsDateTo"></mat-datepicker-toggle>
+            <mat-datepicker #tsDateTo></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-stroked-button class="space" (click)="week()">This week</button>  
+        
+        <mat-form-field>
+            <mat-select placeholder="Category" [formControl]="categoryControl" >
+                <mat-option>-- Any --</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category">
+                {{category?.name}}
+                </mat-option>
+                <mat-hint>{{categoryControl.value?.description}}</mat-hint>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Title" [formControl]="title" maxlength="256" required>
+            <mat-hint align="end">{{title.value.length}} / 256</mat-hint>
+        </mat-form-field>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Specter.Api.Data.Entities
 {
@@ -13,5 +14,11 @@ namespace Specter.Api.Data.Entities
         public virtual string WorkItemIdPrefix { get; set; }
         
         public virtual bool Removed { get; set; }
+
+        public virtual ICollection<Delivery> Deliveries { get; set; }
+
+        public virtual ICollection<UserProject> Users { get; set; }
+
+        public virtual ICollection<Timesheet> Timesheets { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Specter.Api.Data;
 
@@ -14,11 +15,13 @@ namespace Specter.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp");
@@ -32,27 +35,28 @@ namespace Specter.Api.Migrations
                     b.ToTable("IdentityRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
                     b.ToTable("IdentityUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
-                    b.Property<string>("RoleId");
+                    b.Property<Guid>("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -61,7 +65,7 @@ namespace Specter.Api.Migrations
 
             modelBuilder.Entity("Specter.Api.Data.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -134,6 +138,8 @@ namespace Specter.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("Deliveries");
                 });
 
@@ -152,6 +158,10 @@ namespace Specter.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("WorkItemIdPrefix")
+                        .IsUnique()
+                        .HasFilter("[WorkItemIdPrefix] IS NOT NULL");
+
                     b.ToTable("Projects");
                 });
 
@@ -164,8 +174,6 @@ namespace Specter.Api.Migrations
 
                     b.Property<Guid>("CreatedBy");
 
-                    b.Property<string>("CreatedByUserId");
-
                     b.Property<string>("Data")
                         .IsRequired();
 
@@ -174,6 +182,7 @@ namespace Specter.Api.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<Guid?>("ForkId")
+                        .ValueGeneratedOnAdd()
                         .HasDefaultValue(null);
 
                     b.Property<string>("Name")
@@ -183,7 +192,7 @@ namespace Specter.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedByUserId");
+                    b.HasIndex("CreatedBy");
 
                     b.HasIndex("ForkId");
 
@@ -219,8 +228,6 @@ namespace Specter.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
-
                     b.Property<Guid>("CategoryId");
 
                     b.Property<DateTime>("Date");
@@ -238,20 +245,27 @@ namespace Specter.Api.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
+                    b.Property<Guid>("ProjectId");
+
                     b.Property<bool>("Removed")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(false);
 
-                    b.Property<int>("Time");
+                    b.Property<float>("Time");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DeliveryId");
 
                     b.HasIndex("InternalId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Timesheets");
                 });
@@ -268,14 +282,25 @@ namespace Specter.Api.Migrations
 
                     b.HasKey("UserId", "ProjectId", "RoleId");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("UserProjects");
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.Delivery", b =>
+                {
+                    b.HasOne("Specter.Api.Data.Entities.Project", "Project")
+                        .WithMany("Deliveries")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Template", b =>
                 {
                     b.HasOne("Specter.Api.Data.Entities.ApplicationUser", "CreatedByUser")
                         .WithMany("Templates")
-                        .HasForeignKey("CreatedByUserId");
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Specter.Api.Data.Entities.Template", "ForkTemplate")
                         .WithMany("Forks")
@@ -292,9 +317,37 @@ namespace Specter.Api.Migrations
 
             modelBuilder.Entity("Specter.Api.Data.Entities.Timesheet", b =>
                 {
-                    b.HasOne("Specter.Api.Data.Entities.ApplicationUser")
+                    b.HasOne("Specter.Api.Data.Entities.Category", "Category")
                         .WithMany("Timesheets")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Specter.Api.Data.Entities.Delivery", "Delivery")
+                        .WithMany("Timesheets")
+                        .HasForeignKey("DeliveryId");
+
+                    b.HasOne("Specter.Api.Data.Entities.Project", "Project")
+                        .WithMany("Timesheets")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Specter.Api.Data.Entities.ApplicationUser", "User")
+                        .WithMany("Timesheets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Specter.Api.Data.Entities.UserProject", b =>
+                {
+                    b.HasOne("Specter.Api.Data.Entities.Project", "Project")
+                        .WithMany("Users")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Specter.Api.Data.Entities.ApplicationUser", "User")
+                        .WithMany("Projects")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

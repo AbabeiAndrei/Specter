@@ -4,7 +4,8 @@ namespace Specter.Api.Exceptions
     {
         public enum Timesheet : short
         {
-            TimesheetIsLocked = 1
+            TimesheetIsLocked = 1,
+            DeliveryOrProjectNotProvided = 2
         }        
     }
 }

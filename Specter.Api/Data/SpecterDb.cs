@@ -24,11 +24,11 @@ namespace Specter.Api.Data
 
         public virtual DbSet<UserProject> UserProjects { get; set; }
 
-        public virtual DbSet<IdentityUserRole<string>> IdentityUserRoles { get; set; }
+        public virtual DbSet<IdentityUserRole<Guid>> IdentityUserRoles { get; set; }
 
-        public virtual DbSet<IdentityUserClaim<string>> IdentityUserClaims { get; set; }
+        public virtual DbSet<IdentityUserClaim<Guid>> IdentityUserClaims { get; set; }
 
-        public virtual DbSet<IdentityRole> IdentityRoles{ get; set; }
+        public virtual DbSet<IdentityRole<Guid>> IdentityRoles{ get; set; }
 
         public SpecterDb()
         {
@@ -43,7 +43,7 @@ namespace Specter.Api.Data
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=D:\\specter.db");
+            optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=specter;Integrated Security=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -60,12 +60,12 @@ namespace Specter.Api.Data
                 entity.Property(t => t.ForkId).HasDefaultValue(null);
                 entity.Property(t => t.Deleted).HasDefaultValue(false);
                 entity.Property(t => t.CreatedBy).IsRequired();
-                /* 
+                 
                 entity.HasOne(t => t.CreatedByUser)
                       .WithMany(t => t.Templates)
                       .HasForeignKey(t => t.CreatedBy)
                       .IsRequired();
-                */
+                
                 entity.HasOne(t => t.ForkTemplate)
                       .WithMany(t => t.Forks)
                       .HasForeignKey(t => t.ForkId);
@@ -98,29 +98,53 @@ namespace Specter.Api.Data
                 entity.Property(t => t.Description);
                 entity.Property(t => t.Date).IsRequired();
                 entity.Property(t => t.Time).IsRequired();
-                entity.Property(t => t.UserId).IsRequired();
-                entity.Property(t => t.CategoryId).IsRequired();
-                entity.Property(t => t.DeliveryId);
-                entity.Property(t => t.Locked).HasDefaultValue(false);
-                entity.Property(t => t.Removed).HasDefaultValue(false);
                 entity.HasIndex(t => t.InternalId);
-                /*      
+                      
                 entity.HasOne(t => t.User)
                       .WithMany(t => t.Timesheets)
-                      .HasForeignKey(t => t.UserId);
-                */
+                      .HasForeignKey(t => t.UserId)
+                      .IsRequired();
+
+                entity.HasOne(t => t.Delivery)
+                      .WithMany(t => t.Timesheets)
+                      .HasForeignKey(t => t.DeliveryId);
+
+                entity.HasOne(t => t.Project)
+                      .WithMany(t => t.Timesheets)
+                      .HasForeignKey(t => t.ProjectId)
+                      .IsRequired();
+
+                entity.HasOne(t => t.Category)
+                      .WithMany(t => t.Timesheets)
+                      .HasForeignKey(t => t.CategoryId)
+                      .IsRequired();
+
+                entity.Property(t => t.Locked).HasDefaultValue(false);
+                entity.Property(t => t.Removed).HasDefaultValue(false);                
             });
 
             builder.Entity<ApplicationUser>(entity => 
             {
                 entity.Property(p => p.FirstName);
                 entity.Property(p => p.LastName);
+
+                entity.HasMany(p => p.Projects)
+                      .WithOne(p => p.User)
+                      .HasForeignKey(p => p.UserId);
+
+                entity.HasMany(p => p.Timesheets)
+                      .WithOne(p => p.User)
+                      .HasForeignKey(p => p.UserId);
+                    
+                entity.HasMany(p => p.Templates)
+                      .WithOne(p => p.CreatedByUser)
+                      .HasForeignKey(p => p.CreatedBy);
             });
 
-            builder.Entity<IdentityRole>().HasKey(p => p.Id);
+            builder.Entity<IdentityRole<Guid>>().HasKey(p => p.Id);
 
-            builder.Entity<IdentityUserRole<string>>().HasKey(p => new { p.UserId, p.RoleId });
-            builder.Entity<IdentityUserClaim<string>>().HasKey(p => p.Id);
+            builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
+            builder.Entity<IdentityUserClaim<Guid>>().HasKey(p => p.Id);
 
             builder.Entity<Category>(p => 
             {
@@ -137,6 +161,12 @@ namespace Specter.Api.Data
                 p.Property(d => d.Description);
                 p.Property(d => d.WorkItemIdPrefix);
                 p.Property(d => d.Removed);
+
+                p.HasMany(d => d.Deliveries)
+                 .WithOne(d => d.Project)
+                 .HasForeignKey(d => d.ProjectId);
+
+                p.HasIndex(d => d.WorkItemIdPrefix).IsUnique();
             });
 
             builder.Entity<Delivery>(p =>
@@ -147,12 +177,24 @@ namespace Specter.Api.Data
                 p.Property(d => d.Order);
                 p.Property(d => d.ProjectId);
                 p.Property(d => d.Removed);
+
+                p.HasOne(d => d.Project)
+                 .WithMany(d => d.Deliveries)
+                 .HasForeignKey(d => d.ProjectId);
             });
 
             builder.Entity<UserProject>(p => 
             {
                 p.HasKey(up => new { up.UserId, up.ProjectId, up.RoleId });
                 p.Property(up => up.Removed);
+            
+                p.HasOne(d => d.User)
+                 .WithMany(d => d.Projects)
+                 .HasForeignKey(d => d.UserId);
+            
+                p.HasOne(d => d.Project)
+                 .WithMany(d => d.Users)
+                 .HasForeignKey(d => d.ProjectId);
             });
         }
 

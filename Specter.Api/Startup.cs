@@ -47,12 +47,9 @@ namespace Specter.Api
         {
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            if (_environment.IsDevelopment())
-                services.AddDbContext<SpecterDb>(options => options.UseSqlite(Configuration.GetConnectionString("SpecterDbLite")));
-            else
-                services.AddDbContext<SpecterDb>(options => options.UseSqlServer(Configuration.GetConnectionString("SpecterDb")));
+            services.AddDbContext<SpecterDb>(options => options.UseSqlServer(Configuration.GetConnectionString("SpecterDb")));
             
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
                 options.User.RequireUniqueEmail = false;
             })
@@ -138,13 +135,14 @@ namespace Specter.Api
             services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             services.AddScoped<IEmailService, FakeEmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddSingleton<ITimesheetIdCalculator, TimesheetIdCalculator>();
 
             services.AddScoped<ITimesheetRepository, TimesheetRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 
+            services.AddScoped<ITimesheetIdCalculator, TimesheetIdCalculator>();
+            
             services.AddSingleton<IMapper>(CreateMapper());
         }
 

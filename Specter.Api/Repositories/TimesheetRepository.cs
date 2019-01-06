@@ -27,7 +27,10 @@ namespace Specter.Api.Data.Repository
 
         public IQueryable<Timesheet> GetAll()
         {
-            return _context.Timesheets.Where(ts => !ts.Removed).W;
+            return _context.Timesheets.Where(ts => !ts.Removed)
+                                      .Include(ts => ts.Delivery)
+                                      .ThenInclude(d => d.Project)
+                                      .Include(ts => ts.Project);
         }
 
         public void Insert(Timesheet entity)

@@ -6,6 +6,8 @@ namespace Specter.Api.Models
     {
         public virtual Guid CategoryId { get; set; }
 
-        public virtual Guid DeliveryId { get; set; }
+        public virtual Guid? DeliveryId { get; set; }
+
+        public virtual Guid ProjectId { get; set; }
     }
 }

@@ -40,9 +40,9 @@ export class LoginComponent {
 
   performLogin() {
     this.submitted = true;
-    
+
     this.loading = true;
-    var model = new LoginModel;
+    const model = new LoginModel;
     model.email = this.email;
     model.password = this.password;
     model.remeber = this.remeberMe;

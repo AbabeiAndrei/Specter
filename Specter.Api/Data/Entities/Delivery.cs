@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Specter.Api.Data.Entities
 {
@@ -15,5 +16,9 @@ namespace Specter.Api.Data.Entities
         public virtual Guid ProjectId { get; set; }
         
         public virtual bool Removed { get; set; }
+
+        public virtual Project Project { get; set; }
+
+        public virtual ICollection<Timesheet> Timesheets { get; set; }
     }
 }

@@ -1,7 +1,6 @@
-export class Timesheet
-{
-    id: string;    
-    internalId: string;    
+export class Timesheet {
+    id: string;
+    internalId: string;
     name: string;
     description: string;
     date: Date | string;

@@ -9,6 +9,7 @@ import { TimesheetEditDialog } from '../timesheet/timesheet-edit-dialog/timeshee
 
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'timesheet-table',
   templateUrl: './timesheet-table.component.html',
   styleUrls: ['./timesheet-table.component.less'],
@@ -28,7 +29,7 @@ export class TimesheetTableComponent {
     get date(): Date {
       return this._date;
     }
-    @Input() 
+    @Input()
     set date(val: Date) {
       this._date = val;
       this.onDateChanged();
@@ -38,10 +39,10 @@ export class TimesheetTableComponent {
 
     displayedColumns: string[] = ['category', 'id', 'name', 'time'];
 
-    constructor(private timesheetService: TimesheetService, 
+    constructor(private timesheetService: TimesheetService,
                 private dialog: MatDialog,
                 private snackBar: MatSnackBar) { }
-    
+
     onDateChanged() {
       this.refresh();
     }
@@ -57,50 +58,48 @@ export class TimesheetTableComponent {
     }
 
     getTotalTime(): number {
-      if(this.timesheets == null || this.timesheets.data.length <= 0)
+      if (this.timesheets == null || this.timesheets.data.length <= 0) {
         return 0;
-        
+      }
+
       return this.timesheets.data.map(t => t.time).reduce((acc, value) => acc + value, 0);
     }
 
     editTimesheet(ts: Timesheet) {
-      var copy = ts;
+      const copy = ts;
 
       const dialogRef = this.dialog.open(TimesheetEditDialog, {
         data: Object.assign({}, ts),
         width: '400px'
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
 
-        if(result == undefined)
+        if (result === undefined) {
           return;
+        }
 
-        if(result.removed)
-        {
-          this.timesheetService.delete(result.timesheet.id).subscribe(r => {
-            var i = this.timesheets.data.findIndex(t => t.id == copy.id);
+        if (result.removed) {
+          this.timesheetService.delete(result.timesheet.id).subscribe(_ => {
+            const i = this.timesheets.data.findIndex(t => t.id === copy.id);
 
-            if(i >= 0)
-            {
-              var timesheets = this.timesheets.data.splice(i, 1);
-              this.timesheets = new MatTableDataSource(timesheets);
+            if (i >= 0) {
+              this.timesheets.data.splice(i, 1);
+              this.timesheets = new MatTableDataSource(this.timesheets.data);
               this.expandedTs = null;
             }
-          }, 
+          },
           error => {
-            this.snackBar.open(error, "Ok", {
+            this.snackBar.open(error, 'Ok', {
               duration: 8000,
             });
           });
-        }
-        else
-        {
+        } else {
           this.timesheetService.update(result.timesheet).subscribe(_ => {
             Object.assign(copy, result.timesheet);
           },
           error => {
-            this.snackBar.open(error, "Ok", {
+            this.snackBar.open(error, 'Ok', {
               duration: 8000,
             });
           });

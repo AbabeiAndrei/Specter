@@ -22,8 +22,10 @@ import { LoginComponent } from './user-management/login/login.component';
 import { RegisterComponent } from './user-management/register/register.component';
 import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
 import { LogoutComponent } from './user-management/logout/logout.component';
+import { ReportsComponents } from './reports/reports.component';
 
 import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
+import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
 
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
@@ -48,7 +50,9 @@ import {
     HomeComponent,
     NavMenuComponent,
     TimesheetComponent,
+    ReportsComponents,
     TimesheetTableComponent,
+    ReportsFilterComponents,
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
@@ -75,6 +79,7 @@ import {
     MatDialogModule,
     MatSnackBarModule,
     TimesheetTableComponent,
+    ReportsFilterComponents,
     TimesheetEditDialog
   ],
   imports: [
@@ -102,10 +107,11 @@ import {
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},
       { path: 'timesheet', component: TimesheetComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
-      { path: 'register', component: RegisterComponent },      
-      { path: 'forgot', component: ForgotPasswordComponent }, 
-      { path: 'logout', component: LogoutComponent},  
-      { path: '**', redirectTo: '' }   
+      { path: 'register', component: RegisterComponent },
+      { path: 'forgot', component: ForgotPasswordComponent },
+      { path: 'logout', component: LogoutComponent},
+      { path: 'reports', component: ReportsComponents, canActivate: [AuthGuard]},
+      { path: '**', redirectTo: '' }
     ])
   ],
   entryComponents: [

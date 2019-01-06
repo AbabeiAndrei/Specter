@@ -99,10 +99,13 @@ namespace Specter.Api.Controllers
                 var category = _categoryRepository.GetById(model.CategoryId);
                 model.Category = category?.Name; 
 
-                var delivery = _deliveryRepository.GetById(model.DeliveryId);
-                model.Delivery = delivery?.Name;
-
-                var project = _projectRepository.GetById(delivery.ProjectId);
+                if(model.DeliveryId.HasValue)
+                {
+                    var delivery = _deliveryRepository.GetById(model.DeliveryId.Value);
+                    model.Delivery = delivery?.Name;
+                }
+                
+                var project = _projectRepository.GetById(model.ProjectId);
                 model.Project = project?.Name;
             }
 
@@ -143,17 +146,28 @@ namespace Specter.Api.Controllers
             if(ts == null)
                 return BadRequest();
 
-            var delivery = _deliveryRepository.GetById(ts.DeliveryId);
+            Guid projectId;
 
-            if(delivery == null)
-                return BadRequest();
+            if(ts.DeliveryId.HasValue && ts.DeliveryId.Value != Guid.Empty)
+            {
+                var delivery = _deliveryRepository.GetById(ts.DeliveryId);
+
+                if(delivery == null)
+                    return BadRequest();
+
+                projectId = delivery.ProjectId;
+            }
+            else if(model.ProjectId != Guid.Empty)
+                projectId = model.ProjectId;
+            else
+                return BadRequest(Errors.Timesheet.DeliveryOrProjectNotProvided);
 
             ts.UserId = user.Id;
-            ts.InternalId = _timesheetIdCalculator.GetId(delivery.ProjectId);
+            ts.InternalId = _timesheetIdCalculator.Calculate(projectId);
 
             _timesheetRepository.Insert(ts);
 
-            return CreatedAtAction(nameof(Get), ts.Id, ts);
+            return CreatedAtAction(nameof(Get), ts.Id, _mapper.Map<TimesheetModel>(ts));
         }
 
         [Authorize]

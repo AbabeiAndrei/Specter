@@ -15,7 +15,7 @@ export class HomeComponent {
     public applicationName = environment.appName;
     users: User[] = [];
 
-    constructor(private userService: UserService,) { }
+    constructor(private userService: UserService) { }
 
     ngOnInit() {
         // this.userService.getAll().pipe(first()).subscribe(users => {

@@ -10,7 +10,7 @@ namespace Specter.Api.Services
 {
     public interface ITimesheetIdCalculator
     {
-        int GetId(Guid projectId);
+        int Calculate(Guid projectId);
     }
 
     public class TimesheetIdCalculator : ITimesheetIdCalculator
@@ -21,7 +21,7 @@ namespace Specter.Api.Services
 
         private static readonly object _lock = new object();
 
-        private int _lastNumber = -1;
+        private static int _lastNumber = -1;
 
         public TimesheetIdCalculator(ITimesheetRepository timesheetRepository, IDeliveryRepository deliveryRepository)
         {
@@ -29,22 +29,20 @@ namespace Specter.Api.Services
             _deliveryRepository = deliveryRepository;
         }
 
-        public int GetId(Guid projectId)
+        public int Calculate(Guid projectId)
         {
-            var deliveries = _deliveryRepository.GetByProject(projectId)
-                                                .Select(d => d.Id)
-                                                .ToList();
             
-            if(_lastNumber < 0)
-                lock(_lock)
+            lock(_lock)
+            {
+                if(_lastNumber < 0)
                     _lastNumber = _timesheetRepository.GetAll()
-                                                      .Where(ts => ts.DeliveryId.HasValue && 
-                                                                   deliveries.Contains(ts.DeliveryId.Value))
-                                                      .Select(ts => ts.InternalId)
-                                                      .DefaultIfEmpty(0)
-                                                      .Max();
+                                                        .Where(ts => ts.Delivery.ProjectId == projectId)
+                                                        .Select(ts => ts.InternalId)
+                                                        .DefaultIfEmpty(0)
+                                                        .Max();
 
-            return _lastNumber++;
+                return ++_lastNumber;
+            }
         }
     }
 }

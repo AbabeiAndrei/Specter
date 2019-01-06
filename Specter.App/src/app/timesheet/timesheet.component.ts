@@ -18,26 +18,27 @@ import { MatSnackBar } from '@angular/material';
 export class TimesheetComponent {
 
   date = new FormControl(new Date());
-  
+
   categoryControl = new FormControl('', [Validators.required]);
   projectControl = new FormControl('', [Validators.required]);
   deliveryControl = new FormControl('', [Validators.required]);
   title = new FormControl('', [Validators.required, Validators.maxLength(256)]);
   description = new FormControl('', [Validators.maxLength(1024)]);
-  hours = new FormControl('1', [Validators.required, Validators.min(0), Validators.max(12)]);
-  
+  hours = new FormControl('1', [Validators.required, Validators.min(0.1), Validators.max(12)]);
+
   categories: Category[] = [];
   projects: Project[] = [];
   deliveries: Delivery[] = [];
   errors: string[] = [];
 
   @ViewChild('timesheetTable') timesheetTable: TimesheetTableComponent;
-  
-  constructor(private categoryService: CategoryService, 
-              private projectService: ProjectService, 
+
+  constructor(private categoryService: CategoryService,
+              private projectService: ProjectService,
               private tsService: TimesheetService,
               private snackBar: MatSnackBar) {  }
 
+  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
     this.categoryService.getAll().subscribe(c => {
       this.categories = c;
@@ -45,56 +46,51 @@ export class TimesheetComponent {
 
     this.projectService.getAll().subscribe(p => {
       this.projects = p;
-    })
+    });
   }
 
-  setDelivery(project: Project){
+  setDelivery(project: Project) {
     this.deliveries = project.deliveries;
+    this.deliveryControl.reset();
   }
 
-  today(){
+  today() {
     this.date.setValue(new Date());
   }
 
   sendTimesheet() {
-    var errors = [];
+    const errors = [];
 
-    var ts = new Timesheet();
-    
-    if(!this.title.valid)
-    {
+    const ts = new Timesheet();
+
+    if (!this.title.valid) {
       this.title.markAsTouched();
-      errors.push("Please fill the title");
+      errors.push('Please fill the title');
     }
 
-    if(!this.hours.valid)
-    {
+    if (!this.hours.valid) {
       this.hours.markAsTouched();
-      errors.push("Please input a corect number of hours");
+      errors.push('Please input a corect number of hours');
     }
 
-    if(!this.description.valid)
-    {
+    if (!this.description.valid) {
       this.description.markAsTouched();
-      errors.push("Description too long");
+      errors.push('Description too long');
     }
 
-    if(!this.categoryControl.valid)
-    {
+    if (!this.categoryControl.valid) {
       this.categoryControl.markAsTouched();
-      errors.push("Please selecte the category");
+      errors.push('Please selecte the category');
     }
 
-    if(!this.projectControl.valid)
-    {
+    if (!this.projectControl.valid) {
       this.projectControl.markAsTouched();
-      errors.push("Please select the project");
+      errors.push('Please select the project');
     }
-    
-    if(!this.deliveryControl.valid && this.deliveries.length > 0)
-    {
+
+    if (!this.deliveryControl.valid && this.deliveries.length > 0) {
       this.deliveryControl.markAsTouched();
-      errors.push("Please select a delivery");
+      errors.push('Please select a delivery');
     }
     ts.name = this.title.value;
     ts.description = this.description.value;
@@ -102,18 +98,21 @@ export class TimesheetComponent {
     ts.date = this.date.value;
     ts.categoryId = this.categoryControl.value.id;
     ts.projectId = this.projectControl.value.id;
-    ts.deliveryId = this.deliveryControl.value.id;
+    if (this.deliveryControl.value != null) {
+      ts.deliveryId = this.deliveryControl.value.id;
+    }
 
     this.errors = errors;
-    
-    if(errors.length > 0)
+
+    if (errors.length > 0) {
       return;
+    }
 
     this.tsService.add(ts).subscribe(
       result => {
         this.timesheetTable.refresh();
         this.clearFields();
-      }, 
+      },
       error => {
         this.snackBar.open(error, 'Ok', {
           duration: 8000,

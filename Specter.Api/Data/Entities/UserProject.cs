@@ -12,5 +12,9 @@ namespace Specter.Api.Data.Entities
         
         public virtual bool Removed { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
+
+        public virtual Project Project { get; set; }
+
     }
 }

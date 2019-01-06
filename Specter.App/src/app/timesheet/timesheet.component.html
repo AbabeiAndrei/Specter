@@ -12,13 +12,13 @@
             <div class="row">
                 <div class="col-md-5">
                     <mat-form-field>
-                        <input matInput [matDatepicker]="tsDate" placeholder="Select date" [formControl]="date" required>
+                        <input matInput [matDatepicker]="tsDate" placeholder="Select date" [formControl]="date" required readonly>
                         <mat-datepicker-toggle matSuffix [for]="tsDate"></mat-datepicker-toggle>
                         <mat-datepicker #tsDate></mat-datepicker>
                     </mat-form-field>
                 </div>
                 <div class="col-md-7">
-                    <button mat-stroked-button class="today" color="acces" (click)="today()">Today</button>                    
+                    <button mat-stroked-button class="today" (click)="today()">Today</button>                    
                 </div>
             </div>
             <div class="row">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-4">
                     <mat-form-field class="full-width">
-                        <mat-select placeholder="Delivery" [formControl]="deliveryControl" required >
+                        <mat-select placeholder="Delivery" [formControl]="deliveryControl" [required]="deliveries.length <= 0"  [disabled]="deliveries.length <= 0">
                             <mat-option>-- Select Delivery --</mat-option>
                             <mat-option *ngFor="let delivery of deliveries" [value]="delivery">
                                 {{delivery?.name}}

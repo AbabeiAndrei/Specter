@@ -14,16 +14,28 @@ namespace Specter.Api.Data.Entities
 
         public virtual DateTime Date { get; set; }
 
-        public virtual int Time { get; set; }
+        public virtual float Time { get; set; }
 
-        public virtual string UserId { get; set; }
+        public virtual Guid UserId { get; set; }
 
         public virtual Guid CategoryId { get; set; }
+
+        public virtual Guid ProjectId { get; set; }
 
         public virtual Guid? DeliveryId { get; set; }
 
         public virtual bool Locked { get; set; }
 
         public virtual bool Removed { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+
+        public virtual Project Project { get; set; }
+
+        public virtual Delivery Delivery { get; set; }
+        
+        public virtual Category Category { get; set; }
+        
+        public string InternalIdMap => (Delivery?.Project?.WorkItemIdPrefix ?? Project.WorkItemIdPrefix) + InternalId.ToString().PadLeft(4, '0');
     }
 }
