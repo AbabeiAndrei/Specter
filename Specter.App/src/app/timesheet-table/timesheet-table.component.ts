@@ -1,9 +1,6 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { MatTableDataSource, MatDialog } from '@angular/material';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
 import { Timesheet } from 'src/models/timesheet';
-import { Category } from 'src/models/category';
-import { CategoryService } from 'src/services/category.service';
 import { TimesheetService } from 'src/services/timesheet.service';
 
 import {animate, state, style, transition, trigger} from '@angular/animations';
@@ -39,13 +36,19 @@ export class TimesheetTableComponent {
 
     timesheets: MatTableDataSource<Timesheet>;
 
-    displayedColumns: string[] = ['category', 'project', 'name', 'time'];
+    displayedColumns: string[] = ['category', 'id', 'name', 'time'];
 
-    constructor(private timesheetService: TimesheetService, public dialog: MatDialog) { }
+    constructor(private timesheetService: TimesheetService, 
+                private dialog: MatDialog,
+                private snackBar: MatSnackBar) { }
     
     onDateChanged() {
+      this.refresh();
+    }
+
+    public refresh() {
       this.timesheetService.getAll(this._date.toISOString()).subscribe(ts => {
-        this.timesheets = new MatTableDataSource(ts);//.pipe(first())
+        this.timesheets = new MatTableDataSource(ts);
       });
     }
 
@@ -69,9 +72,39 @@ export class TimesheetTableComponent {
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        console.log(result);
-        copy.name = result.name;
+
+        if(result == undefined)
+          return;
+
+        if(result.removed)
+        {
+          this.timesheetService.delete(result.timesheet.id).subscribe(r => {
+            var i = this.timesheets.data.findIndex(t => t.id == copy.id);
+
+            if(i >= 0)
+            {
+              var timesheets = this.timesheets.data.splice(i, 1);
+              this.timesheets = new MatTableDataSource(timesheets);
+              this.expandedTs = null;
+            }
+          }, 
+          error => {
+            this.snackBar.open(error, "Ok", {
+              duration: 8000,
+            });
+          });
+        }
+        else
+        {
+          this.timesheetService.update(result.timesheet).subscribe(_ => {
+            Object.assign(copy, result.timesheet);
+          },
+          error => {
+            this.snackBar.open(error, "Ok", {
+              duration: 8000,
+            });
+          });
+        }
       });
     }
 }

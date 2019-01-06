@@ -15,4 +15,11 @@ export class TimesheetService {
     add(ts: Timesheet) {
       return this.http.post(`${environment.apiUrl}/timesheet/`, ts);
     }
+
+    update(ts: Timesheet): any {
+      return this.http.put(`${environment.apiUrl}/timesheet/${ts.id}`, ts);
+    }
+    delete(id: string): any {
+        return this.http.delete(`${environment.apiUrl}/timesheet/${id}`);
+    }
 }

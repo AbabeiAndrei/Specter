@@ -93,14 +93,17 @@ namespace Specter.Api.Data
             builder.Entity<Timesheet>(entity =>
             {
                 entity.HasKey(t => t.Id);
+                entity.Property(t => t.InternalId).IsRequired();
                 entity.Property(t => t.Name).IsRequired();
                 entity.Property(t => t.Description);
                 entity.Property(t => t.Date).IsRequired();
                 entity.Property(t => t.Time).IsRequired();
                 entity.Property(t => t.UserId).IsRequired();
                 entity.Property(t => t.CategoryId).IsRequired();
-                entity.Property(t => t.DeliveryId).IsRequired();
+                entity.Property(t => t.DeliveryId);
+                entity.Property(t => t.Locked).HasDefaultValue(false);
                 entity.Property(t => t.Removed).HasDefaultValue(false);
+                entity.HasIndex(t => t.InternalId);
                 /*      
                 entity.HasOne(t => t.User)
                       .WithMany(t => t.Timesheets)
@@ -132,6 +135,7 @@ namespace Specter.Api.Data
                 p.HasKey(d => d.Id);
                 p.Property(d => d.Name);
                 p.Property(d => d.Description);
+                p.Property(d => d.WorkItemIdPrefix);
                 p.Property(d => d.Removed);
             });
 

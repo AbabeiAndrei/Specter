@@ -18,10 +18,14 @@ namespace Specter.Api.Models
 
         public virtual int Time { get; set; }
 
+        public virtual bool Locked { get; set; }
+
     }
     public class TimesheetModel : TimesheetBaseModel
     {
         public virtual Guid Id { get; set; }
+
+        public virtual string InternalId { get; set; }
         
         public virtual Guid CategoryId { get; set; }
 

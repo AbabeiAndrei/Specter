@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Specter.Api.Data;
 
 namespace Specter.Api.Migrations
 {
     [DbContext(typeof(SpecterDb))]
-    partial class SpecterDbModelSnapshot : ModelSnapshot
+    [Migration("20190106113256_AddInternalIdToTimesheet")]
+    partial class AddInternalIdToTimesheet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

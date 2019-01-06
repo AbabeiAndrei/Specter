@@ -1,6 +1,7 @@
 export class Timesheet
 {
     id: string;    
+    internalId: string;    
     name: string;
     description: string;
     date: Date | string;
@@ -11,4 +12,5 @@ export class Timesheet
     projectId: string;
     delivery: string;
     deliveryId: string;
+    locked: boolean;
 }

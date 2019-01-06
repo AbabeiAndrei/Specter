@@ -38,7 +38,8 @@ import {
   MatMenuModule,
   MatTableModule,
   MatIconModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -72,6 +73,7 @@ import {
     MatTableModule,
     MatIconModule,
     MatDialogModule,
+    MatSnackBarModule,
     TimesheetTableComponent,
     TimesheetEditDialog
   ],
@@ -94,6 +96,7 @@ import {
     MatTableModule,
     MatIconModule,
     MatDialogModule,
+    MatSnackBarModule,
     NgHttpLoaderModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},

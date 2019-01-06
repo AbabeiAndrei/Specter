@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Specter.Api.Data;
 
 namespace Specter.Api.Migrations
 {
     [DbContext(typeof(SpecterDb))]
-    partial class SpecterDbModelSnapshot : ModelSnapshot
+    [Migration("20190106080757_AddLockToTimesheet")]
+    partial class AddLockToTimesheet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,8 +150,6 @@ namespace Specter.Api.Migrations
 
                     b.Property<bool>("Removed");
 
-                    b.Property<string>("WorkItemIdPrefix");
-
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
@@ -225,11 +225,9 @@ namespace Specter.Api.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<Guid?>("DeliveryId");
+                    b.Property<Guid>("DeliveryId");
 
                     b.Property<string>("Description");
-
-                    b.Property<int>("InternalId");
 
                     b.Property<bool>("Locked")
                         .ValueGeneratedOnAdd()
@@ -250,8 +248,6 @@ namespace Specter.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("InternalId");
 
                     b.ToTable("Timesheets");
                 });

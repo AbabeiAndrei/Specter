@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { CategoryService } from 'src/services/category.service';
 import { Category } from 'src/models/category';
@@ -7,6 +7,8 @@ import { ProjectService } from 'src/services/project.service';
 import { Delivery } from 'src/models/delivery';
 import { TimesheetService } from 'src/services/timesheet.service';
 import { Timesheet } from 'src/models/timesheet';
+import { TimesheetTableComponent } from '../timesheet-table/timesheet-table.component';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-timesheet-component',
@@ -28,10 +30,13 @@ export class TimesheetComponent {
   projects: Project[] = [];
   deliveries: Delivery[] = [];
   errors: string[] = [];
+
+  @ViewChild('timesheetTable') timesheetTable: TimesheetTableComponent;
   
   constructor(private categoryService: CategoryService, 
               private projectService: ProjectService, 
-              private tsService: TimesheetService) {  }
+              private tsService: TimesheetService,
+              private snackBar: MatSnackBar) {  }
 
   ngOnInit() {
     this.categoryService.getAll().subscribe(c => {
@@ -100,13 +105,26 @@ export class TimesheetComponent {
     ts.deliveryId = this.deliveryControl.value.id;
 
     this.errors = errors;
-
-    console.log(ts);
-
-    //return;
+    
+    if(errors.length > 0)
+      return;
 
     this.tsService.add(ts).subscribe(
-      result => {}, 
-      error => {});
-    }
+      result => {
+        this.timesheetTable.refresh();
+        this.clearFields();
+      }, 
+      error => {
+        this.snackBar.open(error, 'Ok', {
+          duration: 8000,
+      });
+    });
   }
+
+  clearFields() {
+    this.title.setValue('');
+    this.title.markAsUntouched();
+    this.description.setValue('');
+    this.description.markAsUntouched();
+  }
+}

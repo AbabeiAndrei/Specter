@@ -9,6 +9,8 @@ namespace Specter.Api.Data.Entities
         public virtual string Name { get; set; }
         
         public virtual string Description { get; set; }
+
+        public virtual string WorkItemIdPrefix { get; set; }
         
         public virtual bool Removed { get; set; }
     }

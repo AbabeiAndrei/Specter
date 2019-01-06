@@ -138,6 +138,7 @@ namespace Specter.Api
             services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             services.AddScoped<IEmailService, FakeEmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddSingleton<ITimesheetIdCalculator, TimesheetIdCalculator>();
 
             services.AddScoped<ITimesheetRepository, TimesheetRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();

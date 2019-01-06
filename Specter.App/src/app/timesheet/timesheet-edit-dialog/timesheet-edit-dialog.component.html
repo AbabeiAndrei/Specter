@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Edit {{ts.name}}</h1>
+<h1 mat-dialog-title>Edit #{{ts.internalId}}</h1>
 <div mat-dialog-content>
   <div class="row">
     <div class="col-md-12">      
@@ -18,17 +18,27 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-        <mat-checkbox class="warn" [(ngModel)]="removed">Removed!</mat-checkbox>
+        <div class="row">
+          <div class="col-md-12">
+            <mat-checkbox [(ngModel)]="ts.locked" color="accent">Locked!</mat-checkbox>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+              <mat-checkbox [(ngModel)]="removed" color="warn">Removed!</mat-checkbox>
+            </div>
+        </div>
     </div>
     <div class="col-md-8">
         <mat-form-field class="full-width">
-            <input matInput type="number" placeholder="Hours" min="0" max="12" required value="1" [formControl]="hours" />
-            <mat-hint class="warn" align="start" [hidden]="hours.value <= 8">Your're about to add more than 8 hours</mat-hint>
+            <input matInput type="number" placeholder="Hours" min="0" max="12" required [formControl]="hours" />
+            <mat-hint color="warn" align="start" [hidden]="hours.value <= 8">Your're about to add more than 8 hours</mat-hint>
         </mat-form-field>
     </div>
   </div>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-button (click)="confirm()" [mat-dialog-close]="ts" cdkFocusInitial>Ok</button>
+<div mat-dialog-actions align="end">
+  <button mat-flat-button (click)="cancel()">Cancel</button>
+  <span class="spacer"></span>
+  <button mat-flat-button class="ok" (click)="confirm()" cdkFocusInitial color="primary">Ok</button>
 </div>

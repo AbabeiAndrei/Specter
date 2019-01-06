@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Specter.Api.Models;
+using Specter.Api.Exceptions;
 using Specter.Api.Services;
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
@@ -30,6 +31,7 @@ namespace Specter.Api.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly IDeliveryRepository _deliveryRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly ITimesheetIdCalculator _timesheetIdCalculator;
 
         public TimesheetController(IMapper mapper, 
                                    IDateParserService dateParserService, 
@@ -37,7 +39,8 @@ namespace Specter.Api.Controllers
                                    ITimesheetRepository timesheetRepository,
                                    ICategoryRepository categoryRepository,
                                    IDeliveryRepository deliveryRepository,
-                                   IProjectRepository projectRepository)
+                                   IProjectRepository projectRepository,
+                                   ITimesheetIdCalculator timesheetIdCalculator)
         {
             _mapper = mapper;
             _dateParserService = dateParserService;
@@ -46,6 +49,7 @@ namespace Specter.Api.Controllers
             _categoryRepository = categoryRepository;
             _deliveryRepository = deliveryRepository;
             _projectRepository = projectRepository;
+            _timesheetIdCalculator = timesheetIdCalculator;
         }
 
         [Authorize]
@@ -139,7 +143,13 @@ namespace Specter.Api.Controllers
             if(ts == null)
                 return BadRequest();
 
+            var delivery = _deliveryRepository.GetById(ts.DeliveryId);
+
+            if(delivery == null)
+                return BadRequest();
+
             ts.UserId = user.Id;
+            ts.InternalId = _timesheetIdCalculator.GetId(delivery.ProjectId);
 
             _timesheetRepository.Insert(ts);
 
@@ -160,6 +170,9 @@ namespace Specter.Api.Controllers
             if(ts == null)
                 return NotFound();
 
+            if(ts.Locked)
+                return BadRequest(Errors.Timesheet.TimesheetIsLocked);
+
             if(ts.UserId != user.Id)
                 return Unauthorized();
 
@@ -167,6 +180,7 @@ namespace Specter.Api.Controllers
             ts.Description = model.Description;
             ts.Date = model.Date;
             ts.Time = model.Time;
+            ts.Locked = model.Locked;
 
             _timesheetRepository.Update(ts);
 
@@ -186,6 +200,9 @@ namespace Specter.Api.Controllers
 
             if(ts == null)
                 return NotFound();
+
+            if(ts.Locked)
+                return BadRequest(Errors.Timesheet.TimesheetIsLocked);
 
             if(ts.UserId != user.Id)
                 return Unauthorized();

@@ -6,6 +6,8 @@ namespace Specter.Api.Data.Entities
     {
         public virtual Guid Id { get; set; }
 
+        public virtual int InternalId { get; set; }
+
         public virtual string Name { get; set; }
 
         public virtual string Description { get; set; }
@@ -18,7 +20,9 @@ namespace Specter.Api.Data.Entities
 
         public virtual Guid CategoryId { get; set; }
 
-        public virtual Guid DeliveryId { get; set; }
+        public virtual Guid? DeliveryId { get; set; }
+
+        public virtual bool Locked { get; set; }
 
         public virtual bool Removed { get; set; }
     }

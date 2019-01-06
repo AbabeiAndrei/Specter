@@ -1,3 +1,8 @@
+div.timesheet-table-container {
+    height: 24em;
+    overflow: auto;
+}
+
 table {
     width: 100%;
 
@@ -13,6 +18,10 @@ table {
 
 tr.mat-footer-row {
     font-weight: bold;
+
+    &.warning > td.mat-footer-cell {
+        color: red
+    }
 }
 
 tr.element-details {
@@ -26,6 +35,11 @@ tr.element-expanded-row + tr.element-details {
 .ts-details {
     .ts-title {
         font-size: 16px;
+
+        .lock {
+            float: right;
+            margin-top: 8px
+        }
     }
 
     .ts-title > button + span {

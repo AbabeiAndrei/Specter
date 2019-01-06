@@ -11,7 +11,10 @@ namespace Specter.Api.Mapper
         {
             CreateMap<UserModel, ApplicationUser>().ReverseMap();
             CreateMap<LoginUserModel, ApplicationUser>().ReverseMap();
-            CreateMap<TimesheetModel, Timesheet>().ReverseMap();
+            CreateMap<TimesheetModel, Timesheet>().ForMember(ts => ts.InternalId, mc => 
+            {
+                mc.
+            }).ReverseMap();
             CreateMap<TimesheetUpdateModel, Timesheet>().ReverseMap();
             CreateMap<CategoryModel, Category>().ReverseMap();
             CreateMap<DeliveryModel, Delivery>().ReverseMap();

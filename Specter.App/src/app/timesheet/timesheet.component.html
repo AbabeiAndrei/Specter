@@ -1,12 +1,14 @@
-<h1>Timesheet</h1>
-
-<p>Welcome {{user}} to your timesheet</p>
-
-<p>Add your timesheet information</p>
-
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Timesheet</h1>
+                    <p>Welcome {{user}} to your timesheet</p>                    
+                    <p>Add your timesheet information</p>
+                    <br>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-5">
                     <mat-form-field>
@@ -16,7 +18,7 @@
                     </mat-form-field>
                 </div>
                 <div class="col-md-7">
-                    <button mat-flat-button class="today" color="secondary" (click)="today()">Today</button>                    
+                    <button mat-stroked-button class="today" color="acces" (click)="today()">Today</button>                    
                 </div>
             </div>
             <div class="row">
@@ -91,7 +93,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <timesheet-table [date]="date.value"></timesheet-table>
+            <timesheet-table #timesheetTable [date]="date.value"></timesheet-table>
         </div>
     </div>
 </div>

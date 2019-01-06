@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 using Specter.Api.Data.Entities;
@@ -27,7 +27,7 @@ namespace Specter.Api.Data.Repository
 
         public IQueryable<Timesheet> GetAll()
         {
-            return _context.Timesheets.Where(ts => !ts.Removed);
+            return _context.Timesheets.Where(ts => !ts.Removed).W;
         }
 
         public void Insert(Timesheet entity)

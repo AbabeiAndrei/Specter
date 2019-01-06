@@ -3,69 +3,73 @@
     <mat-form-field class="full-width">
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
-    <table mat-table matSort class="mat-elevation-z8" [dataSource]="timesheets" multiTemplateDataRows> 
-        <ng-container matColumnDef="category">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-            <td mat-cell *matCellDef="let ts"> {{ts.category}} </td>
-            <td mat-footer-cell *matFooterCellDef> Total </td>
-        </ng-container>
-        
-        <ng-container matColumnDef="project">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Project </th>
-            <td mat-cell *matCellDef="let ts"> {{ts.project}} - {{ts.delivery}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-        
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-            <td mat-cell *matCellDef="let ts"> {{ts.name}} </td>
-            <td mat-footer-cell *matFooterCellDef></td>
-        </ng-container>
-        
-        <ng-container matColumnDef="time">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Hours </th>
-            <td mat-cell *matCellDef="let ts"> {{ts.time | number}} </td>
-            <td mat-footer-cell *matFooterCellDef> {{getTotalTime() | number}} hours</td>
-        </ng-container>
+    <div  class="timesheet-table-container mat-elevation-z8">
+        <table mat-table matSort [dataSource]="timesheets" multiTemplateDataRows> 
+            <ng-container matColumnDef="category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+                <td mat-cell *matCellDef="let ts"> {{ts.category}} </td>
+                <td mat-footer-cell *matFooterCellDef> Total </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+                <td mat-cell *matCellDef="let ts"> #{{ts.internalId}} </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let ts"> {{ts.name}} </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            
+            <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Hours </th>
+                <td mat-cell *matCellDef="let ts"> {{ts.time | number}} </td>
+                <td mat-footer-cell *matFooterCellDef> {{getTotalTime() | number}} hours</td>
+            </ng-container>
 
-        <ng-container matColumnDef="expandedDetail">
-            <td mat-cell *matCellDef="let ts" [attr.colspan]="displayedColumns.length">
-                <div class="ts-details" [@detailExpand]="ts == expandedTs ? 'expanded' : 'collapsed'">
-                    <div class="ts-title">
-                        <button mat-icon-button (click)="editTimesheet(ts)">
-                            <mat-icon aria-label="Options">launch</mat-icon>
-                        </button>
-                        <span>
-                            [{{ts.category}}] 
-                            <span class="ts-name">
-                                {{ts.name}}
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let ts" [attr.colspan]="displayedColumns.length">
+                    <div class="ts-details" [@detailExpand]="ts == expandedTs ? 'expanded' : 'collapsed'">
+                        <div class="ts-title">
+                            <button mat-icon-button (click)="editTimesheet(ts)" [disabled]="ts.locked">
+                                <mat-icon aria-label="Options">launch</mat-icon>
+                            </button>
+                            <span>
+                                [{{ts.category}}] 
+                                <span class="ts-name">
+                                    {{ts.name}}
+                                </span>
                             </span>
-                        </span>
-                    </div>
+                            <mat-icon class="lock" color="warn" matTooltip="Timesheet is locked" [hidden]="!ts.locked">lock</mat-icon>
+                        </div>
 
-                    <div class="ts-time">
-                        {{ts.time | number}} hours
-                    </div>
+                        <div class="ts-time">
+                            {{ts.time | number}} hours
+                        </div>
 
-                    <div class="ts-subtitle">
-                        {{ts.project}} - {{ts.delivery}}
+                        <div class="ts-subtitle">
+                            {{ts.project}} - {{ts.delivery}}
+                        </div>
+                        
+                        <div class="ts-description">
+                            {{ts.description}}
+                        </div>
                     </div>
-                    
-                    <div class="ts-description">
-                        {{ts.description}}
-                    </div>
-                </div>
-            </td>
-        </ng-container>
-        
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        
-        <tr mat-row *matRowDef="let ts; columns: displayedColumns;"
-            [class.element-expanded-row]="expandedTs === ts"
-            (click)="expandedTs = expandedTs === ts ? null : ts"
-            class="timesheet-row">
-        </tr>
-        <tr mat-row class="element-details" *matRowDef="let row; columns: ['expandedDetail'];"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-    </table>
+                </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            
+            <tr mat-row *matRowDef="let ts; columns: displayedColumns;"
+                [class.element-expanded-row]="expandedTs === ts"
+                (click)="expandedTs = expandedTs === ts ? null : ts"
+                class="timesheet-row">
+            </tr>
+            <tr mat-row class="element-details" *matRowDef="let row; columns: ['expandedDetail'];"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" [class.warning]="getTotalTime() > 8"></tr>
+        </table>
+            
+    </div>
 </div>

@@ -10,6 +10,8 @@ namespace Specter.Api.Models
         public virtual string Name { get; set; }
 
         public virtual string Description { get; set; }
+        
+        public virtual string WorkItemIdPrefix { get; set; }
     }
 
     public class ProjectExModel : ProjectModel
