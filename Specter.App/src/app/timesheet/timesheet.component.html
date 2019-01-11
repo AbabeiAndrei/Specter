@@ -9,16 +9,14 @@
                     <br>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-5">
+            <div class="row date-row">
+                <div class="col-md-12">
                     <mat-form-field>
                         <input matInput [matDatepicker]="tsDate" placeholder="Select date" [formControl]="date" required readonly>
                         <mat-datepicker-toggle matSuffix [for]="tsDate"></mat-datepicker-toggle>
                         <mat-datepicker #tsDate></mat-datepicker>
                     </mat-form-field>
-                </div>
-                <div class="col-md-7">
-                    <button mat-stroked-button class="today" (click)="today()">Today</button>                    
+                    <button mat-stroked-button class="today" (click)="today()">Today</button>
                 </div>
             </div>
             <div class="row">
@@ -81,7 +79,7 @@
                     </mat-form-field>
                 </div>
                 <div class="col-md-2">
-                    <button mat-flat-button color="primary" class="send-btn" (click)="sendTimesheet()">Add</button>
+                    <button mat-flat-button color="primary" class="send-btn float-right" (click)="sendTimesheet()">Add</button>
                 </div>
             </div>
             <div class="row errors" [hidden]="errors == null || errors.length <= 0">

@@ -1,7 +1,22 @@
 .filter {
     display: inline;
 
-    & > .mat-form-field, .space {
+    .field {
         margin-right: 6px
+    }
+
+    .expandButton {
+        margin-top: 12px
+    }
+
+    .second {
+        overflow-y: hidden;
+
+        transition: height .5s ease-in-out;
+        height: 0;
+    }
+
+    .second.expanded {
+        height: auto;
     }
 }
