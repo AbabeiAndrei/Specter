@@ -5,18 +5,49 @@
         margin-right: 6px
     }
 
-    .expandButton {
-        margin-top: 12px
+    .field.date-field {
+        max-width: 7em;
+        @media (max-width: 360px) { max-width: 6em }
+
+        & + button {
+            margin-top: 1vh;
+            
+            @media (max-width: 415px) { float: right }
+
+            & > span.mat-button-wrapper {
+                @media (max-width: 375px) { content: "Week" }
+    
+            }
+        }
     }
 
-    .second {
-        overflow-y: hidden;
+    .actions button {
+        margin-top: 1vh;
+        @media (min-width: 375px) { float: right }
+    }
+    
+    @media (min-width: 375px) { 
+        .actions button.search {
+            border-radius: 4px 0px 0px 4px
+        }
 
-        transition: height .5s ease-in-out;
-        height: 0;
+        .actions button.advanced {
+            border-radius: 0px 4px 4px 0px
+        }
     }
 
-    .second.expanded {
-        height: auto;
+    
+    @media (max-width: 360px) { 
+        .actions button.search {
+            margin-top: 0;
+            margin-bottom: 1vh;
+        }
+    }
+
+    .advancedFilter {
+        background-color: black;
+        color: white;
+        font-family: 'Consolas';
+        font-size: .85em;
     }
 }

@@ -25,6 +25,7 @@ import { LogoutComponent } from './user-management/logout/logout.component';
 import { ReportsComponents } from './reports/reports.component';
 
 import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
+import { AdvancedFilterDialog } from './reports/reports-filter/advanced-filter-dialog.component';
 import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
 
 import { NgHttpLoaderModule } from 'ng-http-loader';
@@ -57,7 +58,8 @@ import {
     RegisterComponent,
     ForgotPasswordComponent,
     LogoutComponent,
-    TimesheetEditDialog
+    TimesheetEditDialog,
+    AdvancedFilterDialog
   ],
   exports: [
     DragDropModule,
@@ -80,7 +82,8 @@ import {
     MatSnackBarModule,
     TimesheetTableComponent,
     ReportsFilterComponents,
-    TimesheetEditDialog
+    TimesheetEditDialog,
+    AdvancedFilterDialog
   ],
   imports: [
     HttpClientModule,
@@ -115,7 +118,8 @@ import {
     ])
   ],
   entryComponents: [
-    TimesheetEditDialog
+    TimesheetEditDialog,
+    AdvancedFilterDialog
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
