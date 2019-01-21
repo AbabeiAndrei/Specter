@@ -25,6 +25,11 @@
       <mat-menu #menu="matMenu">
         <a mat-menu-item href="/profile">Profile</a>
         <a mat-menu-item href="/logout">Logout</a>
+        <span mat-menu-item>
+          <mat-slide-toggle [color]="accent" [checked]="darkMode" [(ngModel)]="darkMode">
+            Dark mode
+          </mat-slide-toggle>
+        </span>
       </mat-menu>
     </ng-template>
     <ng-template #notLoggedIn>

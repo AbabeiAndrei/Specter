@@ -1,13 +1,17 @@
 using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
 using Specter.Api.Data.Entities;
 
 namespace Specter.Api.Data
 {
     public class SpecterDb : DbContext, IApplicationContext
     {
+        private static readonly JsonSerializerSettings _conversionSerializeSettings;
+        private static readonly ValueConverter<ApplicatioUserPreferences, string> _applicatioUserPreferenceConverter;
+
         public virtual DbSet<ApplicationUser> Users { get; set; }
 
         public virtual DbSet<Template> Templates { get; set; }
@@ -41,6 +45,21 @@ namespace Specter.Api.Data
 
         }
         
+        static SpecterDb()
+        {
+            _conversionSerializeSettings = new JsonSerializerSettings 
+            { 
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            _applicatioUserPreferenceConverter = new ValueConverter<ApplicatioUserPreferences, string>
+            (
+                p => JsonConvert.SerializeObject(p, _conversionSerializeSettings),
+                p => JsonConvert.DeserializeObject<ApplicatioUserPreferences>(p, _conversionSerializeSettings)
+            );
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost;Initial Catalog=specter;Integrated Security=True;");
@@ -139,6 +158,10 @@ namespace Specter.Api.Data
                 entity.HasMany(p => p.Templates)
                       .WithOne(p => p.CreatedByUser)
                       .HasForeignKey(p => p.CreatedBy);
+
+                entity.Property(p => p.Preferences)
+                      .HasConversion(_applicatioUserPreferenceConverter)
+                      .HasDefaultValue(ApplicatioUserPreferences.Default);
             });
 
             builder.Entity<IdentityRole<Guid>>().HasKey(p => p.Id);
@@ -149,18 +172,19 @@ namespace Specter.Api.Data
             builder.Entity<Category>(p => 
             {
                 p.HasKey(c => c.Id);
-                p.Property(c => c.Name);
+                p.Property(c => c.Name).IsRequired();
                 p.Property(c => c.Description);
-                p.Property(c => c.Removed);
+                p.Property(c => c.Removed).IsRequired().HasDefaultValue(false);
             });
 
             builder.Entity<Project>(p => 
             {
                 p.HasKey(d => d.Id);
-                p.Property(d => d.Name);
+                p.Property(d => d.Name).IsRequired();
+                p.Property(d => d.Code).IsRequired().HasMaxLength(12);
                 p.Property(d => d.Description);
                 p.Property(d => d.WorkItemIdPrefix);
-                p.Property(d => d.Removed);
+                p.Property(d => d.Removed).IsRequired().HasDefaultValue(false);
 
                 p.HasMany(d => d.Deliveries)
                  .WithOne(d => d.Project)
@@ -172,11 +196,11 @@ namespace Specter.Api.Data
             builder.Entity<Delivery>(p =>
             {
                 p.HasKey(d => d.Id);
-                p.Property(d => d.Name);
+                p.Property(d => d.Name).IsRequired();
                 p.Property(d => d.Description);
                 p.Property(d => d.Order);
-                p.Property(d => d.ProjectId);
-                p.Property(d => d.Removed);
+                p.Property(d => d.ProjectId).IsRequired();
+                p.Property(d => d.Removed).IsRequired().HasDefaultValue(false);
 
                 p.HasOne(d => d.Project)
                  .WithMany(d => d.Deliveries)

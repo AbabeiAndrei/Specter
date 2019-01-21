@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-nav-menu',
@@ -13,7 +14,14 @@ export class NavMenuComponent {
   currPage = '';
   appName = environment.appName;
 
-  constructor(public authService: AuthenticationService, private router: Router) {
+  get darkMode():boolean {
+      return this.appComponent.darkMode;
+  }
+  set darkMode(value:boolean) {
+      this.appComponent.darkMode = value;
+  }
+
+  constructor(public authService: AuthenticationService, private router: Router, private appComponent: AppComponent) {
   }
 
   collapse() {

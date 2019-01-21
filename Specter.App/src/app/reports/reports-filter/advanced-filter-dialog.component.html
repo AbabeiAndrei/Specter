@@ -3,13 +3,16 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="container-table mat-elevation-z8">
+        <div class="container-table mat-elevation-z8" [class.small]="showRaw">
           <table mat-table [dataSource]="dataSource" class="filter-table">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Filter </th>
               <td mat-cell *matCellDef="let filter" class="filter-cell"> 
                   <mat-form-field>
-                      <mat-select placeholder="Filter" [(ngModel)]="filter.name" required >
+                      <mat-select placeholder="Filter" 
+                                  [(ngModel)]="filter.name" 
+                                  (selectionChange)="changed($event.value, filter)" 
+                                  required> 
                           <mat-option *ngFor="let f of filters" [value]="f">
                             {{f}}
                           </mat-option>
@@ -22,9 +25,12 @@
               <th mat-header-cell *matHeaderCellDef> Value </th>
               <td mat-cell *matCellDef="let filter" class="value-cell">
                   <mat-form-field class="full-width">
-                    <input matInput placeholder="Value" [(ngModel)]="filter.value" readonly>                      
-                    <button mat-button matSuffix mat-icon-button (click)="selectValueFilter(filter)">
+                    <input matInput placeholder="Value" [formControl]="filter.form" >                      
+                    <button mat-button matSuffix mat-icon-button (click)="selectValueFilter(filter)" hidden>
                         <mat-icon>search</mat-icon>
+                    </button>                      
+                    <button mat-button matSuffix mat-icon-button (click)="showInfo(filter)">
+                        <mat-icon>info</mat-icon>
                     </button>
                   </mat-form-field>
               </td>
@@ -46,17 +52,41 @@
       </div>
     </div>
     <div class="row actions">
-      <div class="col-md-12">
-        <button mat-stroked-button color="accent" (click)='addFilter()'>
+      <div class="col-md-2">
+        <button mat-stroked-button color="primary" (click)='addFilter()'>
           <mat-icon>add</mat-icon>
           Add filter
         </button>
+      </div>
+      <div class="col-md-10">
+        <p class="tip">* All the filters have AND operation between them</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 raw-panel">
+        <mat-expansion-panel [(expanded)]="showRaw" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Raw filter
+            </mat-panel-title>
+            <mat-panel-description>
+              Show Raw filter
+              <mat-icon>code</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+      
+          <mat-form-field class="full-width">
+              <textarea matInput placeholder="Raw Filter" [(formControl)]="rawFilterControl"></textarea>
+          </mat-form-field>
+          
+          <p>* This textarea contain the generated filter, editing the field and altering the filter from the interface will override thet textarea.</p>
+        </mat-expansion-panel>
       </div>
     </div>
   </div>    
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-flat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button (click)="cancel()">Close</button>
   <span class="spacer"></span>
   <button mat-flat-button class="ok" (click)="confirm()" cdkFocusInitial color="primary">Ok</button>
 </div>
