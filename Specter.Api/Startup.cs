@@ -137,12 +137,16 @@ namespace Specter.Api
         {
             services.AddScoped<IApplicationContext, SpecterDb>();
             services.AddScoped<ISeeder, SpecterSeeder>();
+#if DEBUG
+            services.AddScoped<ITestDataSeeder, TestDataSeeder>();
+#endif
 
             services.AddScoped<IDateParserService, DateParserService>();
             services.AddScoped<IUrlCreatorService, UrlCreatorService>();
             services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             services.AddScoped<IEmailService, FakeEmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IReportingFilterService, ReportingFilterService>();            
 
             services.AddScoped<ITimesheetRepository, TimesheetRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();

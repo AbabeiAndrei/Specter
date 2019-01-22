@@ -1,0 +1,24 @@
+=USERS:#Me OR "alex";
+
+void Main()
+{
+	const string exp = @"(Age AND Weight) OR Width AND A > B";
+	
+	var p1 = Expression.Parameter(typeof(bool), "Age");
+	var p2 = Expression.Parameter(typeof(bool), "Weight");
+	var p3 = Expression.Parameter(typeof(bool), "Width");
+	var p4 = Expression.Parameter(typeof(int), "A");
+	var p5 = Expression.Parameter(typeof(int), "B");
+    var e = System.Linq.Dynamic.DynamicExpression.ParseLambda(new[] { p1, p2, p3, p4, p5 }, null, exp);
+	
+	e.Dump();
+}
+
+// Define other methods and classes here
+
+public class Person
+{
+  public bool Age {get;set;}
+  public bool Weight {get;set;}
+  public bool Width {get;set;}
+}   
