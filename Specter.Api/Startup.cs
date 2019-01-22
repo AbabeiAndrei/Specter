@@ -47,7 +47,15 @@ namespace Specter.Api
         {
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContext<SpecterDb>(options => options.UseSqlServer(Configuration.GetConnectionString("SpecterDb")));
+
+            Action<DbContextOptionsBuilder> action;
+
+            if(Configuration.GetValue<bool>("UseInMemoryDb"))
+                action = options => options.UseInMemoryDatabase(Configuration.GetConnectionString("SpecterDbInMemory"));
+            else
+                action = options => options.UseSqlServer(Configuration.GetConnectionString("SpecterDb"));
+
+            services.AddDbContext<SpecterDb>(action);
             
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
