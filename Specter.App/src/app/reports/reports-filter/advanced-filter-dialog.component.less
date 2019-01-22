@@ -3,7 +3,11 @@
 }
 
 .actions {
-    margin-top: 1.2em
+    margin-top: 1.2em;
+
+    .tip {
+        float: right
+    }
 }
 
 td.actions-cell {
@@ -24,4 +28,25 @@ td.value-cell {
 div.container-table {
     height: 24em;
     overflow: auto;
+
+    &.small {
+        height: 15em
+    }
+}
+
+.raw-panel { 
+    .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+        flex-basis: 0;
+    }
+
+    .mat-expansion-panel-header-description {
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    textarea {
+        font-family: "Consolas";
+        font-size: 16px;
+        resize: none
+    }
 }

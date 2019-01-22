@@ -23,10 +23,11 @@ import { RegisterComponent } from './user-management/register/register.component
 import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
 import { LogoutComponent } from './user-management/logout/logout.component';
 import { ReportsComponents } from './reports/reports.component';
+import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
 
 import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
 import { AdvancedFilterDialog } from './reports/reports-filter/advanced-filter-dialog.component';
-import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
+import { InfoboxDialog } from './misc/infobox/infobox-dialog.component';
 
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
@@ -42,7 +43,9 @@ import {
   MatTableModule,
   MatIconModule,
   MatDialogModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatSlideToggleModule,
+  MatExpansionModule
 } from '@angular/material';
 
 @NgModule({
@@ -59,7 +62,8 @@ import {
     ForgotPasswordComponent,
     LogoutComponent,
     TimesheetEditDialog,
-    AdvancedFilterDialog
+    AdvancedFilterDialog,
+    InfoboxDialog
   ],
   exports: [
     DragDropModule,
@@ -80,10 +84,13 @@ import {
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
     TimesheetTableComponent,
     ReportsFilterComponents,
     TimesheetEditDialog,
-    AdvancedFilterDialog
+    AdvancedFilterDialog,
+    InfoboxDialog
   ],
   imports: [
     HttpClientModule,
@@ -105,6 +112,8 @@ import {
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSlideToggleModule,
+    MatExpansionModule,
     NgHttpLoaderModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' , canActivate: [AuthGuard]},
@@ -119,7 +128,8 @@ import {
   ],
   entryComponents: [
     TimesheetEditDialog,
-    AdvancedFilterDialog
+    AdvancedFilterDialog,
+    InfoboxDialog
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

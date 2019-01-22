@@ -22,6 +22,8 @@ export class ReportsFilterComponents {
   deliveryControl = new FormControl('', []);
   usersController = new FormControl('', []);
 
+  filter = '=';
+
   constructor(private dialog: MatDialog) {}
 
   getUserFullName(user: User): string {
@@ -29,12 +31,18 @@ export class ReportsFilterComponents {
   }
 
   showAdvancedFilterDialog() {
+
     const dialogRef = this.dialog.open(AdvancedFilterDialog, {
       width: '80vw'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.showAdvancedFilter = result;
+      if(result == null)
+        return;
+        
+      this.showAdvancedFilter = result.show && result.value;
+      this.filter = ("=" + result.value).trim();
+      //=FROM {{dateFrom.value.toDateString()}} UNTIL {{dateTo.value.toDateString()}} AND (FOR-PROJECT 'Minecraft' OR 'Jetix') AND USER #Me AND CONTAINS '{{textControl.value}}'
     });
   }
 }

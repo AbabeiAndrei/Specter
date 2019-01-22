@@ -23,6 +23,7 @@ namespace Specter.Api.Mapper
                                                   .ForMember(d => d.Project, mc => mc.MapFrom(d => d.Project.Name));
             CreateMap<ProjectModel, Project>().ReverseMap();
             CreateMap<ProjectExModel, Project>().ReverseMap();
+            CreateMap<UserPreferencesModel, ApplicatioUserPreferences>().ReverseMap();
         }
     }
 }

@@ -31,6 +31,6 @@
         </div>
     </div>
     <div class="row advancedFilter" [hidden]="!showAdvancedFilter">
-        =FROM {{dateFrom.value.toDateString()}} UNTIL {{dateTo.value.toDateString()}} AND (FOR-PROJECT 'Minecraft' OR 'Jetix') AND USER #Me AND CONTAINS '{{textControl.value}}'
+        {{filter}}
     </div>
 </div>

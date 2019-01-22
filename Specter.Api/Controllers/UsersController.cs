@@ -195,6 +195,7 @@ namespace Specter.Api.Controllers
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
+            user.Preferences = _mapper.Map<ApplicatioUserPreferences>(model.Preferences);
 
             var result = await _manager.UpdateAsync(user);
             
@@ -204,5 +205,24 @@ namespace Specter.Api.Controllers
             return Ok();
         }
 
+        
+        [Authorize]
+        [HttpPatch("darkMode")]
+        public async Task<ActionResult<UserModel>> ToggleDarkMode([FromBody] bool useDarkMode)
+        {
+            var user = await _manager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return NotFound();
+
+            user.Preferences.DarkMode = useDarkMode;
+
+            var result = await _manager.UpdateAsync(user);
+            
+            if(!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok();
+        }
     }
 }

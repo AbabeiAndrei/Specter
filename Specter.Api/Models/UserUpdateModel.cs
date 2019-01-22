@@ -11,5 +11,7 @@ namespace Specter.Api.Models
         public virtual string CurrentPassword { get; set; }
 
         public virtual string NewPassword { get; set; }
+
+        public virtual UserPreferencesModel Preferences { get; set; }
     }
 }

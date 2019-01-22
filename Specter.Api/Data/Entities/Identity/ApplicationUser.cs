@@ -16,5 +16,7 @@ namespace Specter.Api.Data.Entities
         public virtual ICollection<Timesheet> Timesheets { get; set; }
 
         public virtual ICollection<UserProject> Projects { get; set; }
+
+        public virtual ApplicatioUserPreferences Preferences { get; set; }
     }
 }

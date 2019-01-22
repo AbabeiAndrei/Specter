@@ -14,6 +14,16 @@ export class AppComponent {
   title = environment.appName;
   currentUser: User;
 
+  get darkMode():boolean {
+    return this.currentUser != null && this.currentUser.darkMode;
+  }
+  set darkMode(value:boolean) {
+    this.authenticationService.toggleDarkMode(value).subscribe(() => {
+      if(this.currentUser != null)
+        this.currentUser.darkMode = value;
+    });
+  } 
+
   constructor(private router: Router, private authenticationService: AuthenticationService ) {
       this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
