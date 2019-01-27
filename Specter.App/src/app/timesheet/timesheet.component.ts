@@ -92,10 +92,15 @@ export class TimesheetComponent {
       this.deliveryControl.markAsTouched();
       errors.push('Please select a delivery');
     }
+
+    const date:Date = this.date.value;
+
+    date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+
     ts.name = this.title.value;
     ts.description = this.description.value;
     ts.time = this.hours.value;
-    ts.date = this.date.value;
+    ts.date = date;
     ts.categoryId = this.categoryControl.value.id;
     ts.projectId = this.projectControl.value.id;
     if (this.deliveryControl.value != null) {

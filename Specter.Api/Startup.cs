@@ -27,6 +27,7 @@ using Specter.Api.Mapper;
 using Specter.Api.Services;
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
+using Specter.Api.Services.Filtering;
 
 namespace Specter.Api
 {
@@ -147,6 +148,7 @@ namespace Specter.Api
             services.AddScoped<IEmailService, FakeEmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IReportingFilterService, ReportingFilterService>();            
+            services.AddScoped<IFilterParser, FilterParser>();            
 
             services.AddScoped<ITimesheetRepository, TimesheetRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -156,6 +158,7 @@ namespace Specter.Api
             services.AddScoped<ITimesheetIdCalculator, TimesheetIdCalculator>();
             
             services.AddSingleton<IMapper>(CreateMapper());
+            services.AddSingleton<IFilterKeywordDictionary>(FilterKeywordDictionary.Default());
         }
 
         private IMapper CreateMapper()

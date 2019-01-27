@@ -12,3 +12,17 @@ C:\Users\AndreiAbabei\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.
 C:\Users\AndreiAbabei\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.RazorTargetAssemblyInfo.cache
 C:\Users\AndreiAbabei\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.dll
 C:\Users\AndreiAbabei\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.pdb
+C:\Users\Ababe\Repos\Specter\Specter.Api\bin\Debug\netcoreapp2.1\Specter.Api.deps.json
+C:\Users\Ababe\Repos\Specter\Specter.Api\bin\Debug\netcoreapp2.1\Specter.Api.runtimeconfig.json
+C:\Users\Ababe\Repos\Specter\Specter.Api\bin\Debug\netcoreapp2.1\Specter.Api.runtimeconfig.dev.json
+C:\Users\Ababe\Repos\Specter\Specter.Api\bin\Debug\netcoreapp2.1\Specter.Api.dll
+C:\Users\Ababe\Repos\Specter\Specter.Api\bin\Debug\netcoreapp2.1\Specter.Api.pdb
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.csprojAssemblyReference.cache
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.csproj.CoreCompileInputs.cache
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.RazorAssemblyInfo.cache
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.RazorAssemblyInfo.cs
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.AssemblyInfoInputs.cache
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.AssemblyInfo.cs
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.RazorTargetAssemblyInfo.cache
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.dll
+C:\Users\Ababe\Repos\Specter\Specter.Api\obj\Debug\netcoreapp2.1\Specter.Api.pdb

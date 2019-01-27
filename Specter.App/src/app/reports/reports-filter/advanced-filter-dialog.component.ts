@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { MatDialogRef, MatTableDataSource, MatDialog } from '@angular/material';
 import { InfoboxDialog, InfoboxData } from 'src/app/misc/infobox/infobox-dialog.component';
+import { ReportFilterBuilder } from 'src/services/reportFilterBuilder.service';
 
 export interface FilterItem {
   index: number;
@@ -40,7 +41,7 @@ export class AdvancedFilterDialog {
   rawFilterControl = new FormControl('');
   showRaw = false;
 
-  constructor(public dialogRef: MatDialogRef<AdvancedFilterDialog>, private dialog: MatDialog) {
+  constructor(public dialogRef: MatDialogRef<AdvancedFilterDialog>, private dialog: MatDialog, private filterBuilder: ReportFilterBuilder) {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -65,7 +66,7 @@ export class AdvancedFilterDialog {
     newDs.push(item);
 
     this.dataSource = new MatTableDataSource(newDs);
-
+    
     this.rawFilterControl.setValue('User: #Me');
   }
 

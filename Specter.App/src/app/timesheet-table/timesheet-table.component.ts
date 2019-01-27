@@ -48,6 +48,8 @@ export class TimesheetTableComponent {
     }
 
     public refresh() {
+      this._date.setHours(this._date.getHours() - this._date.getTimezoneOffset() / 60);
+
       this.timesheetService.getAll(this._date.toISOString()).subscribe(ts => {
         this.timesheets = new MatTableDataSource(ts);
       });
