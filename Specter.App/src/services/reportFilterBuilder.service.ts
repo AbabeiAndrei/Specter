@@ -3,24 +3,30 @@ import { KeyedCollection } from 'src/utils/dictionary';
 
 @Injectable({ providedIn: 'root' })
 export class ReportFilterBuilder {
-    dictionary: KeyedCollection<string>
+    private dictionary: KeyedCollection<string>;
 
     set(key: string, value: string): void {
-        if(this.dictionary.ContainsKey(key))
-            value = this.dictionary.Remove(key) + " AND " + value;
+        if (this.dictionary.ContainsKey(key)) {
+            value = this.dictionary.Remove(key) + ' OR ' + value;
+        }
 
         this.dictionary.Add(key, value);
     }
 
-    toString() : string {
-        var sb = "=";
+    clear(): void {
+        this.dictionary.Clear();
+    }
+
+    toString(): string {
+        let sb = '=';
 
         this.dictionary.Keys().forEach(key => {
-            sb += "[" + key.toUpperCase() + ":" + this.dictionary.Item(key) + "];" 
+            sb += '[' + key.toUpperCase() + ':' + this.dictionary.Item(key) + '];';
         });
 
-        if(sb.endsWith(";"))
+        if (sb.endsWith(';')) {
             sb = sb.substring(0, sb.length - 1);
+        }
 
         return sb;
     }
