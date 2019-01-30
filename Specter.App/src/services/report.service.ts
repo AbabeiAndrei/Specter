@@ -9,6 +9,6 @@ export class ReportingService {
     constructor(private http: HttpClient) { }
 
     get(filter: string) {
-        return this.http.get<Report[]>(`${environment.apiUrl}/Reporting?filter=` + encodeURI(filter));
+        return this.http.get<Report>(`${environment.apiUrl}/Reporting?filter=` + encodeURIComponent(filter));
     }
 }

@@ -12,6 +12,8 @@ namespace Specter.Api.Data.Entities
 
         public virtual string Description { get; set; }
 
+        public virtual DateTime Created { get; set; }
+
         public virtual DateTime Date { get; set; }
 
         public virtual float Time { get; set; }

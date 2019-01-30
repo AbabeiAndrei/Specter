@@ -53,11 +53,18 @@ namespace Specter.Api.Controllers
             foreach(var filterExpr in CreateExpressionFilters(repFilter))
                 timesheets = timesheets.Where(filterExpr);
 
+            timesheets = timesheets.OrderBy(ts => ts.User.UserName)
+                                   .ThenBy(ts => ts.Project.Name)
+                                   .ThenBy(ts => ts.Delivery.Name)
+                                   .ThenBy(ts => ts.Category.Name)
+                                   .ThenBy(ts => ts.Created)
+                                   .ThenBy(ts => ts.InternalId);                                   
+
             var report = new ReportModel
             {
                 Filter = filter,
                 Generated = DateTime.Now,
-                Items = timesheets.ToList().Select(CreateReportItem)
+                Timesheets = timesheets.ToList().Select(_mapper.Map<TimesheetModel>)
             };
 
             return report;
@@ -103,14 +110,6 @@ namespace Specter.Api.Controllers
                             ? (Expression<Func<Timesheet, bool>>) (ts => ts.Time >= time)
                             : ts => ts.Time <= time;
                 });
-        }
-
-        private ReportItemModel CreateReportItem(Timesheet ts)
-        {
-            return new ReportItemModel
-            {
-                Timesheet = _mapper.Map<TimesheetModel>(ts)
-            };
         }
 
         private void ReportingDictionaryItemHandler(IFilterParser parser, IFilterKeywordDictionary dictionary, IFilterDictionaryItemNotFoundArgs args)

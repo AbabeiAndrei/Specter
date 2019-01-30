@@ -12,7 +12,7 @@ namespace Specter.Api.Models
 
     public class ReportModel : BaseReportModel
     {
-        public virtual IEnumerable<ReportItemModel> Items { get; set; }
+        public virtual IEnumerable<TimesheetBaseModel> Timesheets { get; set; }
     }
 
     public class ReportGroupedModel : BaseReportModel

@@ -3,7 +3,7 @@ import { KeyedCollection } from 'src/utils/dictionary';
 
 @Injectable({ providedIn: 'root' })
 export class ReportFilterBuilder {
-    private dictionary: KeyedCollection<string>;
+    private dictionary: KeyedCollection<string> = new KeyedCollection();
 
     set(key: string, value: string): void {
         if (this.dictionary.ContainsKey(key)) {
@@ -15,6 +15,14 @@ export class ReportFilterBuilder {
 
     clear(): void {
         this.dictionary.Clear();
+    }
+
+    default(date: Date, user: string = null): string {
+        if (!user) {
+            user = '#Me';
+        }
+
+        return '=[USER:' + user + '];[DATE:' + date.toISOString() + '-' + date.toISOString() + ']';
     }
 
     toString(): string {

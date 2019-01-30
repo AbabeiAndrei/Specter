@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from '../../../models/user';
 import { MatDialog, MatTableDataSource } from '@angular/material';
@@ -27,9 +27,10 @@ export class ReportsFilterComponents {
 
   filter = '=';
 
-  dataSource: MatTableDataSource<Report>;
+  @Output()
+  performSearch: EventEmitter<any> = new EventEmitter();
 
-  constructor(private dialog: MatDialog, private filterBuilder: ReportFilterBuilder, private reportingService: ReportingService) {}
+  constructor(private dialog: MatDialog, private filterBuilder: ReportFilterBuilder) {}
 
   getUserFullName(user: User): string {
     return user.firstName + ' ' + user.lastName;
@@ -51,7 +52,7 @@ export class ReportsFilterComponents {
     });
   }
 
-  performSearch(): void {
+  onPerformSearch(): void {
     let filter: string;
 
     if (this.filter.length <= 1 ) {
@@ -60,9 +61,9 @@ export class ReportsFilterComponents {
       filter = this.filter;
     }
 
-    this.reportingService.get(filter).subscribe(result => {
-      this.dataSource = new MatTableDataSource(result);
-    });
+    if (this.performSearch != null) {
+      this.performSearch.emit(filter);
+    }
   }
 
   getFilterFromDefault(): string {
