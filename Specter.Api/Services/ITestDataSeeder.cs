@@ -1,6 +1,9 @@
 #if DEBUG 
 
+using System;
 using System.Linq;
+
+using Microsoft.AspNetCore.Identity;
 
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
@@ -21,6 +24,9 @@ namespace Specter.Api.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IDeliveryRepository _deliveryRepository;
+        private readonly ITimesheetRepository _timesheetRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITimesheetIdCalculator _timesheetIdCalculator;
 
         #endregion
 
@@ -32,11 +38,19 @@ namespace Specter.Api.Services
 
         #region Constructors
 
-        public TestDataSeeder(ICategoryRepository categoryRepository, IProjectRepository projectRepository, IDeliveryRepository deliveryRepository)
+        public TestDataSeeder(ICategoryRepository categoryRepository, 
+                              IProjectRepository projectRepository,
+                              IDeliveryRepository deliveryRepository,
+                              ITimesheetRepository timesheetRepository,
+                              UserManager<ApplicationUser> userManager,
+                              ITimesheetIdCalculator timesheetIdCalculator)
         {
             _categoryRepository = categoryRepository;
             _projectRepository = projectRepository;
             _deliveryRepository = deliveryRepository;
+            _timesheetRepository = timesheetRepository;
+            _userManager = userManager;
+            _timesheetIdCalculator = timesheetIdCalculator;
         }
 
         #endregion
@@ -153,6 +167,69 @@ namespace Specter.Api.Services
             _deliveryRepository.Insert(del4);
             _deliveryRepository.Insert(del5);
             _deliveryRepository.Insert(del6);
+
+            #endregion
+
+            #region TestTs
+
+            var userId = _userManager.Users.First().Id;
+
+            var ts1 = new Timesheet
+            {
+                InternalId = _timesheetIdCalculator.Calculate(proj1.Id),
+                Name = "TestTs1Jetix",
+                Description = "Test Timesheet 2 Jetix",
+                Date = DateTime.Now,
+                Time = 5,
+                UserId = userId,
+                CategoryId = cat1.Id,
+                ProjectId = proj1.Id,
+                DeliveryId = del1.Id
+            };
+
+            var ts2 = new Timesheet
+            {
+                InternalId = _timesheetIdCalculator.Calculate(proj1.Id),
+                Name = "TestTs2Jetix",
+                Description = "Test Timesheet 2 Jetix",
+                Date = DateTime.Now,
+                Time = 1,
+                UserId = userId,
+                CategoryId = cat1.Id,
+                ProjectId = proj1.Id,
+                DeliveryId = del1.Id
+            };
+
+            var ts3 = new Timesheet
+            {
+                InternalId = _timesheetIdCalculator.Calculate(proj1.Id),
+                Name = "TestTs3Jetix",
+                Description = "Test Timesheet 3 Jetix",
+                Date = DateTime.Now,
+                Time = 2,
+                UserId = userId,
+                CategoryId = cat1.Id,
+                ProjectId = proj1.Id,
+                DeliveryId = del1.Id
+            };
+
+            var ts4 = new Timesheet
+            {
+                InternalId = _timesheetIdCalculator.Calculate(proj1.Id),
+                Name = "TestTs4Jetix",
+                Description = "Test Timesheet 4 Jetix",
+                Date = DateTime.Now.AddDays(1),
+                Time = 2,
+                UserId = userId,
+                CategoryId = cat1.Id,
+                ProjectId = proj1.Id,
+                DeliveryId = del1.Id
+            };
+
+            _timesheetRepository.Insert(ts1);
+            _timesheetRepository.Insert(ts2);
+            _timesheetRepository.Insert(ts3);
+            _timesheetRepository.Insert(ts4);
 
             #endregion
         }

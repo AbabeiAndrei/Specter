@@ -78,10 +78,12 @@ export class ReportsFilterComponents {
       this.filterBuilder.set('TEXT', this.textControl.value);
     }
 
+    this.filterBuilder.set('USER', '#Me');
+
     return this.filterBuilder.toString();
   }
 
   getDateString(date: Date): string {
-    return date.toISOString();
+    return this.filterBuilder.formatDate(date);
   }
 }

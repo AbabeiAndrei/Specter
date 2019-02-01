@@ -15,8 +15,8 @@ namespace Specter.Api.Services
 
     public interface IReportingFilterService
     {
-        bool IsValid(string filter);
-        IEnumerable<IReportingFilterError> Validate(string filter);
+        bool IsValid(string filter, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null);
+        IEnumerable<IReportingFilterError> Validate(string filter, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null);
         IReportingFilter Parse(string filter, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null);
         bool TryParse(string filter, out IReportingFilter result, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null);
     }
@@ -30,16 +30,16 @@ namespace Specter.Api.Services
             _dictionary = dictionary;
         }
 
-        public bool IsValid(string filter)
+        public bool IsValid(string filter, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null)
         {
-            return !Validate(filter).Any();
+            return !Validate(filter, dictNotFoundHandler).Any();
         }
 
-        public IEnumerable<IReportingFilterError> Validate(string filter)
+        public IEnumerable<IReportingFilterError> Validate(string filter, FilterDictionaryItemNotFoundHandler dictNotFoundHandler = null)
         {
             try
             {
-                Parse(filter);
+                Parse(filter, dictNotFoundHandler);
 
                 return Enumerable.Empty<IReportingFilterError>();
             }

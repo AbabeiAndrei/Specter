@@ -269,6 +269,8 @@ namespace Specter.Api.Services.Filtering
                             Length = keyword.Length + 1,
                             Text = '#' + keyword
                         }; 
+                    
+                    return args.Value;
                 }
                     
                 return dictionary[keyword]();

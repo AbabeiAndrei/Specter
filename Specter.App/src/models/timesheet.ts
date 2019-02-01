@@ -4,7 +4,7 @@ export class Timesheet {
     name: string;
     description: string;
     created: Date | string;
-    date: Date | string;
+    date: Date;
     time: number;
     category: string;
     categoryId: string;

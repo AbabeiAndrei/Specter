@@ -43,8 +43,9 @@ namespace Specter.Api.Controllers
         [AllowAnonymous]
         public virtual ActionResult<ReportModel> Get([FromQuery] string filter)
         {
-            if(!_reportingFilterService.IsValid(filter))
-                return BadRequest("Incorect filter value");
+            var errors = _reportingFilterService.Validate(filter, ReportingDictionaryItemHandler).ToList();
+            if(errors.Count > 0)
+                return BadRequest(errors);
 
             var repFilter = _reportingFilterService.Parse(filter, ReportingDictionaryItemHandler);
 
@@ -95,10 +96,11 @@ namespace Specter.Api.Controllers
                 yield return filter.Date.ToExpression<Timesheet>((d, o) => 
                 {
                     var date = DateTime.Parse(d).Date;
+                    var nextDate = date.AddDays(1);
 
                     return o.HasValue && o.Value == Operation.Until
                             ? (Expression<Func<Timesheet, bool>>) (ts => ts.Date >= date)
-                            : ts => ts.Date <= date;
+                            : ts => ts.Date >= date && ts.Date <= nextDate;
                 });
 
             if(filter.Time != null)

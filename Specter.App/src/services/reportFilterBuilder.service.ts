@@ -22,7 +22,11 @@ export class ReportFilterBuilder {
             user = '#Me';
         }
 
-        return '=[USER:' + user + '];[DATE:' + date.toISOString() + '-' + date.toISOString() + ']';
+        return '=[USER:' + user + '];[DATE:' + this.formatDate(date) + '-' + this.formatDate(date) + ']';
+    }
+
+    formatDate(date: Date): string {
+        return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
     }
 
     toString(): string {
