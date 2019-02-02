@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 
 namespace Specter.Api.Data.Entities
 {
@@ -33,8 +32,8 @@ namespace Specter.Api.Data.Entities
 
         public Template ForkTemplate { get; set; }
 
-        public ICollection<Template> Forks { get; set; }
+        public IQueryable<Template> Forks { get; set; }
 
-        public ICollection<TemplateHistory> Edits { get; set; }
+        public IQueryable<TemplateHistory> Edits { get; set; }
     }
 }

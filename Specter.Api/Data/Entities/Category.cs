@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Specter.Api.Data.Entities
 {
@@ -13,6 +13,6 @@ namespace Specter.Api.Data.Entities
         
         public virtual bool Removed { get; set; }
         
-        public virtual ICollection<Timesheet> Timesheets { get; set; }
+        public virtual IQueryable<Timesheet> Timesheets { get; set; }
     }
 }

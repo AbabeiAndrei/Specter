@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Specter.Api.Data;
 
 namespace Specter.Api.Migrations
 {
     [DbContext(typeof(SpecterDb))]
-    partial class SpecterDbModelSnapshot : ModelSnapshot
+    [Migration("20190202203335_AddTeamsAndRoles")]
+    partial class AddTeamsAndRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

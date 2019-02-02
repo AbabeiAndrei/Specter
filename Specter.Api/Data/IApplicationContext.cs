@@ -16,10 +16,10 @@ namespace Specter.Api.Data
         DbSet<Category> Categories {get;}
         DbSet<Delivery> Deliveries { get; }
         DbSet<Project> Projects { get; }
-        DbSet<UserProject> UserProjects { get; }
-        DbSet<IdentityUserRole<Guid>> IdentityUserRoles { get; }
+        DbSet<Role> Roles { get; }
         DbSet<IdentityUserClaim<Guid>> IdentityUserClaims { get; }
-        DbSet<IdentityRole<Guid>> IdentityRoles{ get; }
+        DbSet<UserTeamRole> UserTeamRoles{ get; }
+        DbSet<Team> Teams { get; }
 
     }
 }

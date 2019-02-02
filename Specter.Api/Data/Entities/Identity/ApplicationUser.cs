@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.AspNetCore.Identity;
 
@@ -11,12 +11,14 @@ namespace Specter.Api.Data.Entities
         
         public virtual string LastName { get; set; }
 
-        public virtual ICollection<Template> Templates { get; set; }
-        
-        public virtual ICollection<Timesheet> Timesheets { get; set; }
-
-        public virtual ICollection<UserProject> Projects { get; set; }
-
         public virtual ApplicatioUserPreferences Preferences { get; set; }
+
+        public virtual IQueryable<Template> Templates { get; set; }
+        
+        public virtual IQueryable<Timesheet> Timesheets { get; set; }
+
+        public virtual IQueryable<UserTeamRole> Roles { get; set; }
+
+        public virtual IQueryable<Team> Teams => Roles?.Select(r => r.Team);
     }
 }
