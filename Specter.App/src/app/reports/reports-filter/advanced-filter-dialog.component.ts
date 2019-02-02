@@ -14,7 +14,7 @@ export interface FilterItem {
 export interface FilterItemDefaults {
   default: string;
   readonly: boolean;
-  info?: string
+  info?: string;
 }
 
 @Component({
@@ -27,13 +27,14 @@ export class AdvancedFilterDialog {
   displayedColumns: string[] = ['name', 'value', 'actions'];
 
   filters: string[] = ['Project', 'Delivery', 'User', 'Date', 'Hours', 'Text'];
-  defaultValues: { [filter: string]: FilterItemDefaults } = 
+  defaultValues: { [filter: string]: FilterItemDefaults } =
   {
     'Project': {default: '', readonly: true},
     'User': {default: '#Me', readonly: true, info: 'For users you can use specific tags such as <b>#Me</b> or <b>#Team</b>'},
     'Delivery': {default: '', readonly: true},
-    'Date' : {default: '#Week', readonly: true, info: 'For dates you can use specific keywords such as <b>#Yesterday</b>, <b>#Today</b>, <b>#Week</b> or others. </br> Check the documentation of the application for other options.'},
-    'Hours': {default: '', readonly: false, info: 'For hours you can specify fixed values or intervals (2, 2-5, "1-2" OR "5")'}, 
+    'Date' : {default: '#Week', readonly: true, info: 'For dates you can use specific keywords such as <b>#Yesterday</b>, ' +
+              '<b>#Today</b>, <b>#Week</b> or others. </br> Check the documentation of the application for other options.'},
+    'Hours': {default: '', readonly: false, info: 'For hours you can specify fixed values or intervals (2, 2-5, "1-2" OR "5")'},
     'Text': {default: '', readonly: false},
   };
 
@@ -56,9 +57,8 @@ export class AdvancedFilterDialog {
   addFilter() {
     const newDs = this.dataSource.data;
     const options = this.defaultValues['User'];
-    const item: FilterItem = 
-    {
-      index: newDs.length, 
+    const item: FilterItem = {
+      index: newDs.length,
       name: 'User',
       form: new FormControl(options.default),
       options: options
@@ -66,8 +66,10 @@ export class AdvancedFilterDialog {
     newDs.push(item);
 
     this.dataSource = new MatTableDataSource(newDs);
-    
+
     this.rawFilterControl.setValue('User: #Me');
+
+    this.recomputeRawFilter();
   }
 
   remove(filter: FilterItem) {
@@ -85,6 +87,8 @@ export class AdvancedFilterDialog {
 
       this.dataSource = new MatTableDataSource(this.dataSource.data);
     }
+
+    this.recomputeRawFilter();
   }
 
   changed(value: string, filter: FilterItem) {
@@ -92,15 +96,16 @@ export class AdvancedFilterDialog {
 
     filter.form.setValue(def.default);
     filter.options = def;
+
+    this.recomputeRawFilter();
   }
 
   showInfo(filter: FilterItem) {
     const data: InfoboxData = {
       title: 'Filtering info guide',
       text: '<p>You can declare entities as simple strings or in quotes and ' +
-            'also using AND or OR keywords to make more complex filtering.</p><p>' + 
+            'also using AND or OR keywords to make more complex filtering.</p><p>' +
             (filter.options.info || '') +
-            
             '</p><p><code><b>Eg.</b> ("This item" AND "Other item") OR "This one"</code></p>'
     };
     const dialogRef = this.dialog.open(InfoboxDialog, {
@@ -109,5 +114,14 @@ export class AdvancedFilterDialog {
     });
 
     dialogRef.afterClosed().subscribe(result => { });
+  }
+
+  recomputeRawFilter(): void {
+    this.filterBuilder.clear();
+    this.dataSource.data.forEach(element => {
+      this.filterBuilder.set(element.name, element.form.value);
+    });
+
+    this.rawFilterControl.setValue(this.filterBuilder.toString());
   }
 }

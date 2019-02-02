@@ -115,6 +115,7 @@ namespace Specter.Api.Data
                 entity.Property(t => t.InternalId).IsRequired();
                 entity.Property(t => t.Name).IsRequired();
                 entity.Property(t => t.Description);
+                entity.Property(t => t.Created).HasDefaultValueSql("GETDATE()");
                 entity.Property(t => t.Date).IsRequired();
                 entity.Property(t => t.Time).IsRequired();
                 entity.HasIndex(t => t.InternalId);

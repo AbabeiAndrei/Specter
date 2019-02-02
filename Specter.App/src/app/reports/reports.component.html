@@ -5,10 +5,11 @@
             <p>Bellow you'll find all reports regarding your timesheet</p>
         </div>
     </div>
-    <reports-filter></reports-filter>
+    <reports-filter (performSearch)="performSearch($event)"></reports-filter>
+    <reports-table [dataSource]="dataSource"></reports-table>
     <div class="row">
-        Voluptate velit veniam officia non ea ad ea ut. Irure et minim qui sint. Consequat aute qui deserunt proident veniam veniam. Fugiat amet nostrud culpa sunt occaecat ullamco. Eiusmod officia officia laborum qui aliqua cillum velit dolore voluptate adipisicing. Labore mollit laboris aute nulla deserunt aute. Nostrud id fugiat mollit ad sunt dolor commodo ea labore elit.
-
-Est nulla laborum aute cupidatat esse duis adipisicing anim culpa nostrud nisi esse. Est ad nisi ex quis culpa aliqua cillum laboris minim sunt. Consequat ad est adipisicing ullamco fugiat mollit fugiat nulla. Minim adipisicing magna eu adipisicing excepteur ullamco. Eiusmod ea in tempor incididunt.
+        <div class="col-md-12 pull-right">
+            <button mat-stroked-button color="primary" (click)="export" [hidden]="dataSource.data.length <= 0">Export</button>
+        </div>
     </div>
 </div>

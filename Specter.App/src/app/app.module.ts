@@ -22,8 +22,9 @@ import { LoginComponent } from './user-management/login/login.component';
 import { RegisterComponent } from './user-management/register/register.component';
 import { ForgotPasswordComponent } from './user-management/forgot-password/forgot-password.component';
 import { LogoutComponent } from './user-management/logout/logout.component';
-import { ReportsComponents } from './reports/reports.component';
+import { ReportsComponent } from './reports/reports.component';
 import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
+import { ReportsTableComponent } from './reports/reports-table/reports-table.component';
 
 import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
 import { AdvancedFilterDialog } from './reports/reports-filter/advanced-filter-dialog.component';
@@ -54,9 +55,10 @@ import {
     HomeComponent,
     NavMenuComponent,
     TimesheetComponent,
-    ReportsComponents,
+    ReportsComponent,
     TimesheetTableComponent,
     ReportsFilterComponents,
+    ReportsTableComponent,
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
@@ -88,6 +90,7 @@ import {
     MatExpansionModule,
     TimesheetTableComponent,
     ReportsFilterComponents,
+    ReportsTableComponent,
     TimesheetEditDialog,
     AdvancedFilterDialog,
     InfoboxDialog
@@ -122,7 +125,7 @@ import {
       { path: 'register', component: RegisterComponent },
       { path: 'forgot', component: ForgotPasswordComponent },
       { path: 'logout', component: LogoutComponent},
-      { path: 'reports', component: ReportsComponents, canActivate: [AuthGuard]},
+      { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard]},
       { path: '**', redirectTo: '' }
     ])
   ],

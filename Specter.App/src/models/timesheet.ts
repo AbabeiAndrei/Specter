@@ -3,6 +3,7 @@ export class Timesheet {
     internalId: string;
     name: string;
     description: string;
+    created: Date | string;
     date: Date | string;
     time: number;
     category: string;
