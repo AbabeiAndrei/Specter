@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
@@ -47,10 +48,10 @@ namespace Specter.Api.Controllers
 
             var repFilter = _reportingFilterService.Parse(filter, ReportingDictionaryItemHandler);
 
-            // var user = await _userManager.FindByIdAsync(User.Identity.Name);
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
             
-            // if(user == null)
-            //     return Unauthorized();
+            if(user == null)
+                return Unauthorized();
 
             var timesheets = _timesheetRepository.GetAll();
 
