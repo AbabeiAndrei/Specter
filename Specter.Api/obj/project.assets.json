@@ -12143,23 +12143,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\AndreiAbabei\\.nuget\\packages\\": {},
+    "C:\\Users\\Ababe\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
+      "projectUniqueName": "C:\\Users\\Ababe\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
       "projectName": "Specter.Api",
-      "projectPath": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
-      "packagesPath": "C:\\Users\\AndreiAbabei\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\obj\\",
+      "projectPath": "C:\\Users\\Ababe\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
+      "packagesPath": "C:\\Users\\Ababe\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ababe\\Repos\\Specter\\Specter.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\AndreiAbabei\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Ababe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.1"
