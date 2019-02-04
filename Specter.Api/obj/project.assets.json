@@ -12149,11 +12149,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
+      "projectUniqueName": "c:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
       "projectName": "Specter.Api",
-      "projectPath": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
+      "projectPath": "c:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\Specter.Api.csproj",
       "packagesPath": "C:\\Users\\AndreiAbabei\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\obj\\",
+      "outputPath": "c:\\Users\\AndreiAbabei\\Repos\\Specter\\Specter.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

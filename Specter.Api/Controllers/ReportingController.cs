@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 
@@ -40,14 +41,18 @@ namespace Specter.Api.Controllers
         }
         
         [HttpGet]
-        [AllowAnonymous]
-        public virtual ActionResult<ReportModel> Get([FromQuery] string filter)
+        public async virtual Task<ActionResult<ReportModel>> Get([FromQuery] string filter)
         {
             var errors = _reportingFilterService.Validate(filter, ReportingDictionaryItemHandler).ToList();
             if(errors.Count > 0)
                 return BadRequest(errors);
 
             var repFilter = _reportingFilterService.Parse(filter, ReportingDictionaryItemHandler);
+
+            var user = await _userManager.FindByIdAsync(User.Identity.Name);
+            
+            if(user == null)
+                return Unauthorized();
 
             var timesheets = _timesheetRepository.GetAll();
 
@@ -122,7 +127,7 @@ namespace Specter.Api.Controllers
             if(args.Dictionary.Equals(nameof(IReportingFilter.User), StringComparison.OrdinalIgnoreCase) &&
                args.Keyword.Equals("Me", StringComparison.OrdinalIgnoreCase))
             {
-                var user = _userManager.FindByNameAsync(User.Identity.Name).GetAwaiter().GetResult();
+                var user = _userManager.FindByIdAsync(User.Identity.Name).GetAwaiter().GetResult();
 
                 if(user != null)
                     args.Value = user.UserName;   
