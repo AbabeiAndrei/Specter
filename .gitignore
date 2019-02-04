@@ -1,3 +1,8 @@
 Specter.Api/bin/Debug/netcoreapp2.1/Specter.Api.runtimeconfig.dev.json
 Specter.Api/bin/Debug/netcoreapp2.1/Specter.Api.deps.json
 Specter.Api/obj/project.assets.json
+Specter.Api/obj/Specter.Api.csproj.nuget.cache
+Specter.Api/obj/Specter.Api.csproj.nuget.g.props
+Specter.Api/obj/Debug/netcoreapp2.1/Specter.Api.assets.cache
+Specter.Api/obj/Debug/netcoreapp2.1/Specter.Api.csproj.CoreCompileInputs.cache
+Specter.Api/obj/Debug/netcoreapp2.1/project.razor.json
