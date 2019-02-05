@@ -93,7 +93,7 @@ export class TimesheetComponent {
       errors.push('Please select a delivery');
     }
 
-    const date:Date = this.date.value;
+    const date: Date = this.date.value;
 
     date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
 
