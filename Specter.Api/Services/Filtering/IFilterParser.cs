@@ -273,7 +273,7 @@ namespace Specter.Api.Services.Filtering
                     return args.Value;
                 }
                     
-                return dictionary[keyword]();
+                return dictionary[keyword].Value;
             }
             
             return value.Trim('"');

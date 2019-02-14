@@ -21,7 +21,7 @@ namespace Specter.Api.Services.Filtering
                 ["DATE"] = new FilterItemKeywordDictionary
                 {
                     ["Today"] = FilterItemDictionaryResult.FromResult(() => DateTime.Now.ToString("dd.MM.yyyy")),
-                    ["Week"] = () => $"{DateTime.Now.StartOfWeek():dd.MM.yyy}-{DateTime.Now.EndOfWeek():dd.MM.yyy}"
+                    ["Week"] = FilterItemDictionaryResult.FromResult(() => $"{DateTime.Now.StartOfWeek():dd.MM.yyy}-{DateTime.Now.EndOfWeek():dd.MM.yyy}")
                 }
             };
         }
