@@ -6,7 +6,7 @@ namespace Specter.Api.Data.Entities
     public enum Visibility : short
     {
         Public = 0,
-        Group = 1,
+        Team = 1,
         Private = 2
     }
 

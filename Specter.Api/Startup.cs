@@ -154,6 +154,7 @@ namespace Specter.Api
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+            services.AddScoped<ITemplateRepository, TemplateRepository>();
 
             services.AddScoped<ITimesheetIdCalculator, TimesheetIdCalculator>();
             
