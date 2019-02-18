@@ -13,10 +13,13 @@ export interface InfoboxData {
     styleUrls: ['infobox-dialog.component.less']
 })
 export class InfoboxDialog {
+  data: InfoboxData;
 
   constructor(
     public dialogRef: MatDialogRef<InfoboxDialog>,
-    @Inject(MAT_DIALOG_DATA) private data: InfoboxData) { }
+    @Inject(MAT_DIALOG_DATA) data: InfoboxData) {
+      this.data = data;
+    }
 
   confirm() {
     this.dialogRef.close(true);

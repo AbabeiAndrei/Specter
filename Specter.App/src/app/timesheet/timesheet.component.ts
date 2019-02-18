@@ -9,6 +9,7 @@ import { TimesheetService } from 'src/services/timesheet.service';
 import { Timesheet } from 'src/models/timesheet';
 import { TimesheetTableComponent } from '../timesheet-table/timesheet-table.component';
 import { MatSnackBar } from '@angular/material';
+import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
   selector: 'app-timesheet-component',
@@ -31,12 +32,17 @@ export class TimesheetComponent {
   deliveries: Delivery[] = [];
   errors: string[] = [];
 
+  user: string;
+
   @ViewChild('timesheetTable') timesheetTable: TimesheetTableComponent;
 
   constructor(private categoryService: CategoryService,
               private projectService: ProjectService,
               private tsService: TimesheetService,
-              private snackBar: MatSnackBar) {  }
+              private snackBar: MatSnackBar,
+              authService: AuthenticationService) {
+                this. user = authService.currentUserValue.firstName;
+              }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {

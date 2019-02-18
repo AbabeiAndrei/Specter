@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:5000/api",
-  appName: "Split"
+  apiUrl: 'https://spectertsapi.azurewebsites.net/api',
+  appName: 'Split'
 };

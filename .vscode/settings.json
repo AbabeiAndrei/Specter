@@ -1,4 +1,4 @@
 {
-    "appService.defaultWebAppToDeploy": "/subscriptions/4b8a6415-3240-46ab-9b7d-47231a4edbe9/resourceGroups/SpecterTs/providers/Microsoft.Web/sites/SpecterTsApi",
-    "appService.deploySubpath": "Specter.Api"
+    "appService.deploySubpath": "Specter.App\\dist\\Specter",
+    "appService.defaultWebAppToDeploy": "/subscriptions/4b8a6415-3240-46ab-9b7d-47231a4edbe9/resourceGroups/SpecterTs/providers/Microsoft.Web/sites/Splitt"
 }

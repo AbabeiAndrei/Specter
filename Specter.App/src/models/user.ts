@@ -5,3 +5,9 @@ export class User {
     darkMode: boolean;
     token?: string;
 }
+
+export class UserCreate {
+    email: string;
+    name: string;
+    password: string;
+}

@@ -1,11 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { User } from '../../../models/user';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { AdvancedFilterDialog } from './advanced-filter-dialog.component';
 import { ReportFilterBuilder } from 'src/services/reportFilterBuilder.service';
-import { ReportingService } from 'src/services/report.service';
-import { Report } from 'src/models/report';
 
 @Component({
   selector: 'reports-filter',
@@ -34,6 +32,10 @@ export class ReportsFilterComponents {
 
   getUserFullName(user: User): string {
     return user.firstName + ' ' + user.lastName;
+  }
+
+  week(): void {
+
   }
 
   showAdvancedFilterDialog() {
