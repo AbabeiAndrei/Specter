@@ -50,11 +50,12 @@ namespace Specter.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             Action<DbContextOptionsBuilder> action;
+            var si = new SecretInterpreter();
 
             if(Configuration.GetValue<bool>("UseInMemoryDb"))
-                action = options => options.UseInMemoryDatabase(Configuration.GetConnectionString("SpecterDbInMemory"));
+                action = options => options.UseInMemoryDatabase(si.GetKey(Configuration.GetConnectionString("SpecterDbInMemory")));
             else
-                action = options => options.UseSqlServer(Configuration.GetConnectionString("SpecterDb"));
+                action = options => options.UseSqlServer(si.GetKey(Configuration.GetConnectionString("SpecterDb")));
 
             services.AddDbContext<SpecterDb>(action);
             
@@ -156,6 +157,7 @@ namespace Specter.Api
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 
             services.AddScoped<ITimesheetIdCalculator, TimesheetIdCalculator>();
+            services.AddScoped<ISecretInterpreter, SecretInterpreter>();
             
             services.AddSingleton<IMapper>(CreateMapper());
             services.AddSingleton<IFilterKeywordDictionary>(FilterKeywordDictionary.Default());

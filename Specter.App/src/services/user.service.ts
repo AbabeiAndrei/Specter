@@ -14,6 +14,6 @@ export class UserService {
     }
 
     register(model: UserCreate) {
-      return this.http.post<User[]>(`${environment.apiUrl}/users`, model);
+      return this.http.post<User[]>(`${environment.apiUrl}/users/register`, model);
     }
 }

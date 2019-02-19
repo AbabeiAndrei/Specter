@@ -89,7 +89,12 @@ namespace Specter.Api.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = _mapper.Map<ApplicationUser>(model);
+            var user = new ApplicationUser
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email
+            };
 
             var result = await _manager.CreateAsync(user, model.Password);
 
@@ -99,7 +104,7 @@ namespace Specter.Api.Controllers
 
             var emailTemplate = _emailTemplateBuilder.BuildTemplate(EmailTemplates.ActivateUser, user.FirstName, url);
 
-            await _emailService.SendEmail(model.Email, emailTemplate);
+            await _emailService.SendEmailAsync(model.Email, emailTemplate);
 
             if(!result.Succeeded)
                 return BadRequest(result);
@@ -122,7 +127,7 @@ namespace Specter.Api.Controllers
 
             var emailTemplate = _emailTemplateBuilder.BuildTemplate(EmailTemplates.UserResetPassword, url);
 
-            var result = await _emailService.SendEmail(email, emailTemplate);
+            var result = await _emailService.SendEmailAsync(email, emailTemplate);
 
             if(result)
                 return Ok();

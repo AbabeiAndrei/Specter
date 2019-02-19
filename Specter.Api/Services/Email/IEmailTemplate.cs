@@ -9,5 +9,8 @@ namespace Specter.Api.Services
         string Body { get; }
 
         IEnumerable<IEmailAttachament> Attachaments { get; }
+
+        string PlainText();
+        string HtmlText();
     }
 }

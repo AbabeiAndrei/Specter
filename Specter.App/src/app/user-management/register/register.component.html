@@ -26,9 +26,16 @@
             </mat-form-field>
         </div>
         <div class="row register-actions-pnl">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <button mat-flat-button color="primary" (click)="doRegister()">Register</button>
             </div>
+        </div>
+        <div class="row" [hidden]="errors == null || errors.length <= 0">
+            <ul>
+                <li *ngFor="let error of errors">
+                    {{ error }}
+                </li>
+            </ul>
         </div>
     </div>
     <div class="col-md-8 right-pnl">

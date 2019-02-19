@@ -29,10 +29,8 @@ namespace Specter.Api
                 var context = scope.ServiceProvider.GetRequiredService<SpecterDb>();
                 
                 await context.Database.MigrateAsync();
-
-                //await context.Database.MigrateAsync();
+                
                 await seeder.Seed();
-
 #if DEBUG 
                 var dataSeeder = scope.ServiceProvider.GetRequiredService<ITestDataSeeder>();
 

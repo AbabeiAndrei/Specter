@@ -6,14 +6,18 @@ namespace Specter.Api.Services.Email
     public abstract class BaseEmailTemplate : IEmailTemplate
     {
         public abstract string Subject { get; }
-        public string Body => BuildBody();
+        public virtual string Body => BuildBody();
 
-        public IEnumerable<IEmailAttachament> Attachaments => null;
+        public virtual IEnumerable<IEmailAttachament> Attachaments => null;
 
         protected BaseEmailTemplate()
         {            
         }
 
         protected abstract string BuildBody();
+
+        public virtual string PlainText() => Body;
+
+        public virtual string HtmlText() => Body;
     }
 }

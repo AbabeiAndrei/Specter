@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/services/user.service';
 import { User, UserCreate } from 'src/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'register',
@@ -19,7 +20,8 @@ export class RegisterComponent {
 
   errors: string[];
 
-  constructor(private userManager: UserService) { }
+  constructor(private userManager: UserService,
+    private router: Router) { }
 
   doRegister(): void {
 
@@ -45,7 +47,7 @@ export class RegisterComponent {
       return;
     }
 
-    const name = getName(this.name);
+    const name = this.getName(this.name);
     const model = new UserCreate();
 
     model.email = this.email;
@@ -53,8 +55,14 @@ export class RegisterComponent {
     model.lastName = this.name[1];
     model.password = this.password;
 
-    this.userManager.register(model);
+    this.userManager.register(model).subscribe(r => {
+      this.router.navigateByUrl('/');
+    }, e => {
+      this.errors.push(e);
+    });
   }
-  
-  getName(name: string): 
+
+  getName(name: string) {
+    return name.split(' ', 2);
+  }
 }

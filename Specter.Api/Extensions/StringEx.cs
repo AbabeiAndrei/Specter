@@ -29,5 +29,15 @@ namespace Specter.Api.Extensions
         {
             return _numberCheckRegex.IsMatch(source ?? string.Empty);
         }
+
+        public static string TrimStart(this string target, string trimChars)
+        {
+            return target.TrimStart(trimChars.ToCharArray());
+        }
+
+        public static string TrimEnd(this string target, string trimChars)
+        {
+            return target.TrimEnd(trimChars.ToCharArray());
+        }
     }
 }

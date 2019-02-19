@@ -8,6 +8,7 @@ export class User {
 
 export class UserCreate {
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
     password: string;
 }
