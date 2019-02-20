@@ -1,8 +1,5 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-
-using Microsoft.EntityFrameworkCore;
 
 using Specter.Api.Data.Repository;
 

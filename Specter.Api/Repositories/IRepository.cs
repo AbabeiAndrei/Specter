@@ -1,5 +1,4 @@
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace Specter.Api.Data.Repository
 {

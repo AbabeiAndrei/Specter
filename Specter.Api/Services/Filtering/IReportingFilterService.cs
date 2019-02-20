@@ -1,14 +1,8 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
 using Specter.Api.Services.Filtering;
-
-using System;
-using System.Text.RegularExpressions;
-using System.Linq.Expressions;
-using System.Linq.Dynamic;
-using DynamicExpression = System.Linq.Dynamic.DynamicExpression;
-using Specter.Api.Extensions;
 
 namespace Specter.Api.Services
 {

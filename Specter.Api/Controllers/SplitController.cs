@@ -1,17 +1,7 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using AutoMapper;
-
-using Specter.Api.Models;
-using Specter.Api.Data.Repository;
 using Microsoft.Extensions.Configuration;
-using Specter.Api.Data.Entities;
 using System.Reflection;
 using Specter.Api.Services;
 

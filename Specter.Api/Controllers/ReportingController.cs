@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
+using AutoMapper;
+
 using Specter.Api.Models;
 using Specter.Api.Services;
 using Specter.Api.Extensions;
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
 using Specter.Api.Services.Filtering;
-
-using AutoMapper;
 
 namespace Specter.Api.Controllers
 {
@@ -98,7 +98,7 @@ namespace Specter.Api.Controllers
                                                                            ts.Description.Contains(t, StringComparison.OrdinalIgnoreCase));
 
             if(filter.Date != null)
-                yield return filter.Date.ToExpression<Timesheet>((d, o) => 
+                yield return filter.Date.ToExpression((d, o) => 
                 {
                     var date = DateTime.Parse(d).Date;
                     var nextDate = date.AddDays(1);
@@ -109,7 +109,7 @@ namespace Specter.Api.Controllers
                 });
 
             if(filter.Time != null)
-                yield return filter.Time.ToExpression<Timesheet>((t, o)  =>
+                yield return filter.Time.ToExpression((t, o)  =>
                 {
                     var time = int.Parse(t);
 

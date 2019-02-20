@@ -1,33 +1,37 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+
+using Microsoft.Extensions.Logging;
+
 using SendGrid;
 using SendGrid.Helpers.Mail;
+
+using Specter.Api.Services.Email;
 
 namespace Specter.Api.Services
 {
     public interface IEmailService
     {
-        Task<bool> SendEmailAsync(string email, IEmailTemplate template);
+        Task<bool> SendEmailAsync(string email, IEmailTemplate template, string name = null);
     }
 
-    public class SmtpEmailService : IEmailService
+    public class SendgridEmailService : IEmailService
     {
-        private readonly EmailConfiguration _configuration;
+        private readonly IEmailConfiguration _configuration;
         private readonly ISecretInterpreter _secretInterpreter;
 
-        private protected virtual EmailConfiguration Configuration => _configuration;
+        private protected virtual IEmailConfiguration Configuration => _configuration;
         
-        public SmtpEmailService(IConfiguration configuration, ISecretInterpreter secretInterpreter)
+        public SendgridEmailService(IEmailConfiguration configuration, ISecretInterpreter secretInterpreter)
         {
-            //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
-            _configuration = configuration.GetValue<EmailConfiguration>("EmailConfig");
+            _configuration = configuration;
             _secretInterpreter = secretInterpreter;
         }
 
-        public virtual async Task<bool> SendEmailAsync(string email, IEmailTemplate template)
+        public virtual async Task<bool> SendEmailAsync(string email, IEmailTemplate template, string name = null)
         {
             var apikey = _secretInterpreter.GetKey(Configuration.ApiKey);
             var client = new SendGridClient(apikey);
@@ -38,20 +42,76 @@ namespace Specter.Api.Services
                 PlainTextContent = template.PlainText(),
                 HtmlContent = template.HtmlText()
             };
-            msg.AddTo(email);
+            msg.AddTo(email, name);
             var response = await client.SendEmailAsync(msg);
 
-            return response.StatusCode == HttpStatusCode.OK;
+            return response.StatusCode == HttpStatusCode.Accepted;
         }
     }
 
-    internal class EmailConfiguration
+    public class SmtpEmailService : IEmailService, IDisposable
     {
-        public virtual string ApiKey { get; set; }
+        private readonly SmtpClient _mailClient;
+        private readonly IEmailConfiguration _configuration;
+        //private readonly ILogger _logger;
 
-        public virtual string FromEmail { get; set; }
+        public SmtpEmailService(IEmailConfiguration configuration, ISecretInterpreter secretInterpreter/*, ILogger logger*/)
+        {
+            var user = secretInterpreter.GetKey(configuration.SmtpUser);
+            var password = secretInterpreter.GetKey(configuration.SmtpPassword);
 
-        public virtual string FromName { get; set; }
+            _mailClient = new SmtpClient
+            {
+                Host = configuration.SmtpHost,
+                Port = configuration.SmtpPort,
+                EnableSsl = configuration.SmtpUseSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(user, password)
+            };
+
+            _configuration = configuration;
+            //_logger = logger;
+        }
+
+        public Task<bool> SendEmailAsync(string email, IEmailTemplate template, string name = null)
+        {
+            return Task.Factory.StartNew(() => SendMailAsyncImpl(email, template, name));
+        }
+
+        private bool SendMailAsyncImpl(string email, IEmailTemplate template, string name)
+        {
+            try
+            {
+                using (var message = CreateMailMessage(email, template, name))
+                    _mailClient.Send(message);
+
+                return true;
+            }
+            catch//(Exception ex)
+            {
+                //_logger.LogError(ex, ex.Message);
+                return false;
+            }
+        }
+
+        private MailMessage CreateMailMessage(string email, IEmailTemplate template, string name)
+        {
+            var fromAddress = new MailAddress(_configuration.FromEmail, _configuration.FromName);
+            var toAddress = new MailAddress(email, name);
+
+            return new MailMessage(fromAddress, toAddress)
+            {
+                Subject = template.Body,
+                Body = template.Body,
+                IsBodyHtml = true
+            };
+        }
+
+        public void Dispose()
+        {
+            _mailClient.Dispose();
+        }
     }
 
     public class FakeEmailService : IEmailService
@@ -65,9 +125,9 @@ namespace Specter.Api.Services
             _extension = ".email";
         }
 
-        public Task<bool> SendEmailAsync(string email, IEmailTemplate template)
+        public Task<bool> SendEmailAsync(string email, IEmailTemplate template, string name = null)
         {
-            File.WriteAllText(Path.Combine(_filePath, email + _extension), CreateEmailBody(template));
+            File.WriteAllText(Path.Combine(_filePath, email.Replace('@', '_') + _extension), CreateEmailBody(template));
             return Task.FromResult(true);
         }
 

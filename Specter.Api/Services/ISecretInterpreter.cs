@@ -18,7 +18,7 @@ namespace Specter.Api.Services
                 throw new ArgumentNullException(nameof(key));
 
             if(key.StartsWith(StartEnvToken))
-                return Environment.GetEnvironmentVariable(key.TrimStart(StartEnvToken));
+                return Environment.GetEnvironmentVariable(key.TrimStart(StartEnvToken), EnvironmentVariableTarget.Machine);
 
             return key;
         }

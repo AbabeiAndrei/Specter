@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Specter.Api.Models
 {
     public class UserUpdateModel

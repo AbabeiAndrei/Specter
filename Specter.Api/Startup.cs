@@ -1,33 +1,27 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using AutoMapper;
 
 using Specter.Api.Data;
-using Specter.Api.Models;
 using Specter.Api.Mapper;
 using Specter.Api.Services;
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
 using Specter.Api.Services.Filtering;
+using Specter.Api.Services.Email;
+using Microsoft.Extensions.Logging;
 
 namespace Specter.Api
 {
@@ -61,15 +55,18 @@ namespace Specter.Api
             
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
             {
-                options.User.RequireUniqueEmail = false;
+                options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<SpecterDb>()
             .AddDefaultTokenProviders();
+
+            services.AddLogging(ConfigureLogging);
 
             ConfigureAuthorization(services);
 
             ConfigureInjectedServices(services);
         }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -134,8 +131,7 @@ namespace Specter.Api
             });
         }
 
-
-        public void ConfigureInjectedServices(IServiceCollection services)
+        private void ConfigureInjectedServices(IServiceCollection services)
         {
             services.AddScoped<IApplicationContext, SpecterDb>();
             services.AddScoped<ISeeder, SpecterSeeder>();
@@ -146,7 +142,7 @@ namespace Specter.Api
             services.AddScoped<IDateParserService, DateParserService>();
             services.AddScoped<IUrlCreatorService, UrlCreatorService>();
             services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
-            services.AddScoped<IEmailService, FakeEmailService>();
+            services.AddScoped<IEmailService, SmtpEmailService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IReportingFilterService, ReportingFilterService>();            
             services.AddScoped<IFilterParser, FilterParser>();            
@@ -159,8 +155,17 @@ namespace Specter.Api
             services.AddScoped<ITimesheetIdCalculator, TimesheetIdCalculator>();
             services.AddScoped<ISecretInterpreter, SecretInterpreter>();
             
-            services.AddSingleton<IMapper>(CreateMapper());
-            services.AddSingleton<IFilterKeywordDictionary>(FilterKeywordDictionary.Default());
+            services.AddSingleton<IEmailConfiguration>(Configuration.GetSection("EmailConfig").Get<EmailConfiguration>());
+            services.AddSingleton(CreateMapper());
+            services.AddSingleton(FilterKeywordDictionary.Default());
+        }
+        
+        private void ConfigureLogging(ILoggingBuilder builder)
+        {
+            builder.AddConsole();
+            builder.AddDebug();
+            builder.AddEventSourceLogger();
+            builder.AddConfiguration(Configuration.GetSection("Logging"));
         }
 
         private IMapper CreateMapper()

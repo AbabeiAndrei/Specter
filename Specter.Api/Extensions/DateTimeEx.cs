@@ -1,7 +1,6 @@
 using System;
-using System.Text.RegularExpressions;
 
-namespace Specter.Api.Extensions 
+namespace Specter.Api.Extensions
 {
     public static class DateTimeEx
     {

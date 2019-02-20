@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Specter.Api.Models;
-using Specter.Api.Exceptions;
 using Specter.Api.Services;
+using Specter.Api.Exceptions;
 using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
 

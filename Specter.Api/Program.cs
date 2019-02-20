@@ -1,15 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Specter.Api.Data;
@@ -23,20 +16,27 @@ namespace Specter.Api
         {
             var host = CreateWebHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
+            try
             {
-                var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
-                var context = scope.ServiceProvider.GetRequiredService<SpecterDb>();
-                
-                await context.Database.MigrateAsync();
-                
-                await seeder.Seed();
-#if DEBUG 
-                var dataSeeder = scope.ServiceProvider.GetRequiredService<ITestDataSeeder>();
+                using (var scope = host.Services.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
+                    var context = scope.ServiceProvider.GetRequiredService<SpecterDb>();
 
-                if(dataSeeder.CanSeed)
-                    dataSeeder.SeedTestData();
+                    await context.Database.MigrateAsync();
+
+                    await seeder.Seed();
+#if DEBUG
+                    var dataSeeder = scope.ServiceProvider.GetRequiredService<ITestDataSeeder>();
+
+                    if (dataSeeder.CanSeed)
+                        dataSeeder.SeedTestData();
 #endif
+                }
+            }
+            catch
+            {
+
             }
 
             host.Run();

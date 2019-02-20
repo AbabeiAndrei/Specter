@@ -1,8 +1,11 @@
 using System;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 using Newtonsoft.Json;
+
 using Specter.Api.Data.Entities;
 
 namespace Specter.Api.Data

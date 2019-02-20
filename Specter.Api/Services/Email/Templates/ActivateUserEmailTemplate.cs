@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Specter.Api.Services.Email
 {
     public class ActivateUserEmailTemplate : BaseEmailTemplate

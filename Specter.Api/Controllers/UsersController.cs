@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -11,13 +9,14 @@ using AutoMapper;
 
 using Specter.Api.Models;
 using Specter.Api.Services;
+using Specter.Api.Extensions;
 using Specter.Api.Data.Entities;
 
 namespace Specter.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : ControllerBase, IDisposable
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly UserManager<ApplicationUser> _manager;
@@ -36,12 +35,10 @@ namespace Specter.Api.Controllers
             _emailTemplateBuilder = emailTemplateBuilder;
         }
 
-        // GET api/values
-        [AllowAnonymous]
-        [HttpGet("profile/{email}")]
-        public async Task<ActionResult<UserModel>> Profile([FromRoute] string email)
+        [HttpGet("profile/{id}")]
+        public async Task<ActionResult<UserModel>> Profile([FromRoute] Guid id)
         {
-            var user = await _manager.FindByEmailAsync(email);
+            var user = await _manager.FindByIdAsync(id.ToString());
 
             if(user == null)
                 return NotFound();
@@ -93,10 +90,14 @@ namespace Specter.Api.Controllers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email
+                Email = model.Email,
+                UserName = model.Email
             };
 
             var result = await _manager.CreateAsync(user, model.Password);
+            
+            if(!result.Succeeded)
+                return BadRequest(result.CreateErrorMessage());
 
             var token = await _manager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -106,10 +107,7 @@ namespace Specter.Api.Controllers
 
             await _emailService.SendEmailAsync(model.Email, emailTemplate);
 
-            if(!result.Succeeded)
-                return BadRequest(result);
-
-            return CreatedAtAction("Profile", _mapper.Map<UserModel>(user));
+            return Created("profile/" + user.Email, _mapper.Map<UserModel>(user));
         }
     
         [AllowAnonymous]
@@ -228,6 +226,13 @@ namespace Specter.Api.Controllers
                 return BadRequest(result.Errors);
 
             return Ok();
+        }
+
+        public void Dispose()
+        {
+            _manager.Dispose();
+            if (_emailService is IDisposable disposableEmailService)
+                disposableEmailService.Dispose();
         }
     }
 }
