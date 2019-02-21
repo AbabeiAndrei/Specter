@@ -227,6 +227,26 @@ namespace Specter.Api.Controllers
 
             return Ok();
         }
+        
+        [Authorize]
+        [HttpPatch("changePassword")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _manager.FindByIdAsync(User.Identity.Name);
+
+            if(user == null)
+                return NotFound();
+
+            var result = await _manager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            
+            if(!result.Succeeded)
+                return BadRequest(result.CreateErrorMessage());
+
+            return Ok();
+        }
 
         public void Dispose()
         {

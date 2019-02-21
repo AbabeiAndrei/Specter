@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { User, UserCreate } from '../models/user';
 import { environment } from '../environments/environment';
-import { Observable } from 'rxjs';
+import { ChangePassword } from 'src/models/changePassword';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -16,5 +16,9 @@ export class UserService {
 
   register(model: UserCreate) {
     return this.http.post<User[]>(`${environment.apiUrl}/users/register`, model);
+  }
+
+  changePassword(model: ChangePassword) {
+    return this.http.patch<any>(`${environment.apiUrl}/users/changePassword`, model);
   }
 }

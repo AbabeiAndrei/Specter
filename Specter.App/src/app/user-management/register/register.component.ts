@@ -51,8 +51,8 @@ export class RegisterComponent {
     const model = new UserCreate();
 
     model.email = this.email;
-    model.firstName = this.name[0];
-    model.lastName = this.name[1];
+    model.firstName = name[0];
+    model.lastName = name[1];
     model.password = this.password;
 
     this.userManager.register(model).subscribe(r => {
@@ -63,6 +63,10 @@ export class RegisterComponent {
   }
 
   getName(name: string) {
-    return name.split(' ', 2);
+    name = name.trim();
+    return [
+      name.split(' ')[0],
+      name.substring(name.indexOf(' ') + 1)
+    ];
   }
 }

@@ -1,5 +1,4 @@
-export class Delivery
-{
+export class Delivery {
     id: string;
     name: string;
     description: string;

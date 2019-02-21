@@ -59,7 +59,8 @@ namespace Specter.Api.Controllers
             foreach(var filterExpr in CreateExpressionFilters(repFilter))
                 timesheets = timesheets.Where(filterExpr);
 
-            timesheets = timesheets.OrderBy(ts => ts.User.UserName)
+            timesheets = timesheets.OrderBy(ts => ts.Date)
+                                   .ThenBy(ts => ts.User.UserName)
                                    .ThenBy(ts => ts.Project.Name)
                                    .ThenBy(ts => ts.Delivery.Name)
                                    .ThenBy(ts => ts.Category.Name)
@@ -105,7 +106,7 @@ namespace Specter.Api.Controllers
 
                     return o.HasValue && o.Value == Operation.Until
                             ? (Expression<Func<Timesheet, bool>>) (ts => ts.Date >= date)
-                            : ts => ts.Date >= date && ts.Date <= nextDate;
+                            : ts => ts.Date <= nextDate;
                 });
 
             if(filter.Time != null)
