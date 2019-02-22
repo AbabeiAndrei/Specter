@@ -6,10 +6,13 @@
         </div>
     </div>
     <reports-filter (performSearch)="performSearch($event)"></reports-filter>
+    <div [hidden]="!filterText">
+        {{filterText}}
+    </div>
     <reports-table [dataSource]="dataSource"></reports-table>
-    <div class="row">
+    <div class="row export">
         <div class="col-md-12 pull-right">
-            <button mat-stroked-button color="primary" (click)="export" [hidden]="dataSource.data.length <= 0">Export</button>
+            <button mat-stroked-button color="primary" (click)="export" [hidden]="dataSource.data.length <= 0" disabled>Export</button>
         </div>
     </div>
 </div>

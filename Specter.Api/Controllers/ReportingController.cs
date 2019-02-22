@@ -70,6 +70,7 @@ namespace Specter.Api.Controllers
             var report = new ReportModel
             {
                 Filter = filter,
+                FilterText = repFilter.ToString(),
                 Generated = DateTime.Now,
                 Timesheets = timesheets.ToList().Select(_mapper.Map<TimesheetModel>)
             };
@@ -101,7 +102,7 @@ namespace Specter.Api.Controllers
             if(filter.Date != null)
                 yield return filter.Date.ToExpression((d, o) => 
                 {
-                    var date = DateTime.Parse(d).Date;
+                    var date = DateTime.ParseExact(d, new[] { "dd.MM.yyyy", "d.M.yyyy" }, null).Date;
                     var nextDate = date.AddDays(1);
 
                     return o.HasValue && o.Value == Operation.Until

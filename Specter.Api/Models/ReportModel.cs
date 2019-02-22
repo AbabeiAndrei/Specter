@@ -7,6 +7,8 @@ namespace Specter.Api.Models
     {
         public virtual string Filter { get; set; }
 
+        public virtual string FilterText { get; set; }
+
         public virtual DateTime Generated { get; set; }
     }
 

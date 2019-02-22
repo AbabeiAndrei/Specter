@@ -64,6 +64,7 @@
             
             <tr mat-row *matRowDef="let ts; columns: displayedColumns;"
                 [class.element-expanded-row]="expandedTs === ts"
+                [class.ts-locked]="ts.locked"
                 (click)="expandedTs = expandedTs === ts ? null : ts"
                 class="timesheet-row">
             </tr>

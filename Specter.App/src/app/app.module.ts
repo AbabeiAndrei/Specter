@@ -25,6 +25,7 @@ import { LogoutComponent } from './user-management/logout/logout.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ReportsFilterComponents } from './reports/reports-filter/reports-filter.component';
 import { ReportsTableComponent } from './reports/reports-table/reports-table.component';
+import { ProfileComponent } from './user-management/profile/profile.component';
 
 import { TimesheetEditDialog } from './timesheet/timesheet-edit-dialog/timesheet-edit-dialog.component';
 import { AdvancedFilterDialog } from './reports/reports-filter/advanced-filter-dialog.component';
@@ -63,6 +64,7 @@ import {
     RegisterComponent,
     ForgotPasswordComponent,
     LogoutComponent,
+    ProfileComponent,
     TimesheetEditDialog,
     AdvancedFilterDialog,
     InfoboxDialog
@@ -125,6 +127,7 @@ import {
       { path: 'register', component: RegisterComponent },
       { path: 'forgot', component: ForgotPasswordComponent },
       { path: 'logout', component: LogoutComponent},
+      { path: 'profile', component: ProfileComponent},
       { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard]},
       { path: '**', redirectTo: '' }
     ])

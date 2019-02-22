@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +22,6 @@ using Specter.Api.Data.Entities;
 using Specter.Api.Data.Repository;
 using Specter.Api.Services.Filtering;
 using Specter.Api.Services.Email;
-using Microsoft.Extensions.Logging;
-
 namespace Specter.Api
 {
     public class Startup
@@ -44,7 +43,7 @@ namespace Specter.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             Action<DbContextOptionsBuilder> action;
-            var si = new SecretInterpreter();
+            var si = new SecretInterpreter(_environment);
 
             if(Configuration.GetValue<bool>("UseInMemoryDb"))
                 action = options => options.UseInMemoryDatabase(si.GetKey(Configuration.GetConnectionString("SpecterDbInMemory")));

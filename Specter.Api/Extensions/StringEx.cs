@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Text.RegularExpressions;
 
 namespace Specter.Api.Extensions 
@@ -38,6 +39,14 @@ namespace Specter.Api.Extensions
         public static string TrimEnd(this string target, string trimChars)
         {
             return target.TrimEnd(trimChars.ToCharArray());
+        }
+
+        public static string ToTitleCase(this string source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            return Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(source.ToLower());
         }
     }
 }

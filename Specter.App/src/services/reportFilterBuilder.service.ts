@@ -17,12 +17,12 @@ export class ReportFilterBuilder {
         this.dictionary.Clear();
     }
 
-    default(date: Date, user: string = null): string {
+    default(dateFrom: Date, dateTo: Date, user: string = null): string {
         if (!user) {
             user = '#Me';
         }
 
-        return '=[USER:' + user + '];[DATE:' + this.formatDate(date) + '-' + this.formatDate(date) + ']';
+        return '=[USER:' + user + '];[DATE:' + this.formatDate(dateFrom) + '-' + this.formatDate(dateTo) + ']';
     }
 
     formatDate(date: Date): string {

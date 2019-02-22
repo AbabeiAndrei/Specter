@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Text;
+
 namespace Specter.Api.Services.Filtering
 {
     public interface IReportingFilter
@@ -32,5 +35,33 @@ namespace Specter.Api.Services.Filtering
         public virtual IFilterItem Time { get; set; }
 
         public virtual IFilterItem Text { get; set; }
+
+        public override string ToString()
+        {
+            var filters = new[]
+            {
+                User,
+                Project,
+                Delivery,
+                Category,
+                Date,
+                Time,
+                Text
+            }.Where(fi => fi != null)
+            .Select(fi => fi.ToString())
+            .Where(s => !string.IsNullOrEmpty(s))
+            .ToList();
+
+            if (filters.Count == 0)
+                return "Full report";
+
+            var sb = new StringBuilder("Report");
+
+            sb.Append(" for ");
+
+            sb.Append(string.Join(", ", filters));
+
+            return sb.ToString();
+        }
     }
 }

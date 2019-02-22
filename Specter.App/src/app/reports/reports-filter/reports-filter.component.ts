@@ -1,16 +1,18 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { User } from '../../../models/user';
 import { MatDialog } from '@angular/material';
 import { AdvancedFilterDialog } from './advanced-filter-dialog.component';
 import { ReportFilterBuilder } from 'src/services/reportFilterBuilder.service';
+import { DateUtilsProvider } from 'src/services/dateutils';
 
 @Component({
   selector: 'reports-filter',
   templateUrl: './reports-filter.component.html',
   styleUrls: ['./reports-filter.component.less']
 })
-export class ReportsFilterComponents {
+export class ReportsFilterComponents implements OnInit {
+
   showAdvancedFilter = false;
 
   dateNow = new Date();
@@ -28,14 +30,19 @@ export class ReportsFilterComponents {
   @Output()
   performSearch: EventEmitter<any> = new EventEmitter();
 
-  constructor(private dialog: MatDialog, private filterBuilder: ReportFilterBuilder) {}
+  constructor(private dialog: MatDialog, private filterBuilder: ReportFilterBuilder, private dateUtils: DateUtilsProvider) {}
 
   getUserFullName(user: User): string {
     return user.firstName + ' ' + user.lastName;
   }
 
-  week(): void {
+  ngOnInit(): void {
+    this.week();
+  }
 
+  week(): void {
+    this.dateFrom.setValue(this.dateUtils.getMonday(this.dateNow));
+    this.dateTo.setValue(this.dateUtils.getSunday(this.dateNow));
   }
 
   showAdvancedFilterDialog() {
