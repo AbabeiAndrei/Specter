@@ -47,8 +47,10 @@ import {
   MatDialogModule,
   MatSnackBarModule,
   MatSlideToggleModule,
-  MatExpansionModule
+  MatExpansionModule,
+  DateAdapter
 } from '@angular/material';
+import { SpecterDateAdapter } from 'src/utils/SpecterDateAdapter';
 
 @NgModule({
   declarations: [
@@ -140,6 +142,7 @@ import {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: DateAdapter, useClass: SpecterDateAdapter},
   ],
   bootstrap: [AppComponent]
 })
